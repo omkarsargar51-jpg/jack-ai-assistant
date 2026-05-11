@@ -212,6 +212,22 @@
         width: 100% !important;
         margin-bottom: 5px !important;
     }
+    /* 6. Fix the Dropdown Menus (Voice and Model selectors) */
+    select {
+        width: 100% !important; /* Forces them to stretch across the screen */
+        max-width: 100% !important;
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* If your dropdowns are wrapped in a container, force it to stack vertically */
+    .controls, #controls, .top-controls, .selectors {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
 }
 
 
