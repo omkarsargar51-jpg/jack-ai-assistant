@@ -646,8 +646,10 @@ async function processQuery(query) {
             }
 
             // Call the local Flask backend
-            const response = await fetch("http://127.0.0.1:5000/api/chat", {
-                method: "POST",
+            // MAKE SURE YOU INCLUDE /api/chat AT THE END!
+const response = await fetch("https://jack-ai-assistant.onrender.com/api/chat", {
+    method: "POST",
+    // ... the rest of your code stays the same
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     model: targetModel,
