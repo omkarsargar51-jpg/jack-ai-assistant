@@ -152,81 +152,99 @@
       border-radius: 3px;
       transition: height 0.05s ease, background-color 0.2s ease;
     }
-  /* =========================================
-   📱 MOBILE RESPONSIVE RULES (V2)
+ /* =========================================
+   📱 MOBILE RESPONSIVE RULES (V3 - Space Optimized)
    ========================================= */
 @media screen and (max-width: 768px) {
-    /* 1. Turn the whole body into a vertical column */
+    /* 1. Lock the screen height */
     body { 
         display: flex !important; 
         flex-direction: column !important; 
-        height: 100vh !important; /* Lock it to exactly the screen height */
+        height: 100vh !important; 
         margin: 0 !important;
-        overflow: hidden !important; /* Stop the whole page from scrolling */
+        overflow: hidden !important; 
     }
 
-    /* 2. Fix the Top Header (Title and Dropdowns) */
-    /* Note: If your top bar uses a different ID/Class, add it to this list! */
+    /* 2. Shrink the Header area */
     header, #header, .header-container, .top-bar { 
         display: flex !important;
-        flex-direction: column !important; /* Stack the title above the dropdown */
-        align-items: center !important;
+        flex-direction: column !important; 
         width: 100% !important;
-        padding: 10px !important;
-        gap: 10px !important;
-        order: 1 !important; /* Force to the very top */
+        padding: 5px 10px !important; /* Smaller padding */
+        order: 1 !important; 
         box-sizing: border-box;
     }
 
-    /* 3. Bring Jack's Avatar up */
+    /* Shrink the title text */
+    header h1, header h2, .logo, .title {
+        font-size: 20px !important; /* Smaller text */
+        margin: 2px 0 8px 0 !important;
+        text-align: center !important;
+    }
+
+    /* Put dropdowns side-by-side to save vertical space! */
+    .controls, #controls, .top-controls, .selectors {
+        display: flex !important;
+        flex-direction: row !important; /* Side-by-side! */
+        justify-content: space-between !important;
+        width: 100% !important;
+        gap: 5px !important;
+    }
+
+    /* Shrink dropdown padding and width */
+    select {
+        width: 49% !important; /* Fit two in a row */
+        padding: 6px !important; /* Thinner boxes */
+        font-size: 12px !important; /* Smaller text */
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* If there is a top button, make it thin */
+    #toggle-mic {
+        width: 100% !important;
+        padding: 8px !important;
+        margin-top: 5px !important;
+        font-size: 14px !important;
+    }
+
+    /* 3. Shrink Jack's Avatar Box */
     #avatar-container {
         width: 100% !important;
-        height: 40vh !important; /* Give him the top 40% of the screen */
-        order: 2 !important; /* Force right below the header */
+        height: 25vh !important; /* DECREASED FROM 40% TO 25% */
+        order: 2 !important; 
         grid-area: auto !important; 
     }
 
-    /* 4. Put the Chat Log below the Avatar */
+    /* 4. MAXIMIZE the Chat Log Space */
     #chat-log {
         width: 100% !important;
-        flex-grow: 1 !important; /* Tell the chat to stretch and fill the remaining space */
+        flex-grow: 1 !important; /* Forces it to claim ALL remaining empty space */
         height: auto !important; 
-        order: 3 !important; /* Force below the avatar */
+        order: 3 !important; 
         border: none !important; 
         padding: 15px !important;
         box-sizing: border-box !important;
+        overflow-y: auto !important; /* Ensures it scrolls properly */
     }
 
-    /* 5. Keep the Input Box pinned at the bottom */
+    /* 5. Keep the Input Box tidy at the bottom */
     #input-container {
         width: 100% !important;
-        order: 4 !important; /* Force to the absolute bottom */
+        order: 4 !important; 
         box-sizing: border-box !important;
-        padding: 10px !important;
+        padding: 8px 10px !important;
         display: flex !important;
-        flex-wrap: wrap !important; /* Let buttons wrap if they need to */
-        justify-content: center !important;
+        align-items: center !important;
+        gap: 8px !important;
     }
     
     #text-input {
-        width: 100% !important;
-        margin-bottom: 5px !important;
-    }
-    /* 6. Fix the Dropdown Menus (Voice and Model selectors) */
-    select {
-        width: 100% !important; /* Forces them to stretch across the screen */
-        max-width: 100% !important;
-        margin-top: 5px !important;
-        margin-bottom: 5px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* If your dropdowns are wrapped in a container, force it to stack vertically */
-    .controls, #controls, .top-controls, .selectors {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        gap: 8px !important;
+        flex-grow: 1 !important; /* Let the text box fill the row */
+        width: auto !important;
+        font-size: 16px !important; 
+        padding: 10px !important;
+        margin: 0 !important;
     }
 }
 
