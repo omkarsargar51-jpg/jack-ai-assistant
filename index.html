@@ -787,7 +787,7 @@ const response = await fetch("https://jack-ai-assistant.onrender.com/api/chat", 
             base64ImageData = null; 
             if(document.getElementById('image-upload')) document.getElementById('image-upload').value = ""; 
 
-            if (isToggledOn) speak(aiText); else setState('idle');
+            speak(aiText);
             
         } catch (error) {
             console.error("Backend Error:", error);
