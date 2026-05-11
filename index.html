@@ -152,45 +152,69 @@
       border-radius: 3px;
       transition: height 0.05s ease, background-color 0.2s ease;
     }
-   /* =========================================
-   📱 MOBILE RESPONSIVE RULES
+  /* =========================================
+   📱 MOBILE RESPONSIVE RULES (V2)
    ========================================= */
 @media screen and (max-width: 768px) {
-    /* 1. Override the Grid Layout on the main body */
+    /* 1. Turn the whole body into a vertical column */
     body { 
         display: flex !important; 
         flex-direction: column !important; 
-        height: auto !important;
-        overflow-x: hidden;
+        height: 100vh !important; /* Lock it to exactly the screen height */
+        margin: 0 !important;
+        overflow: hidden !important; /* Stop the whole page from scrolling */
     }
 
-    /* 2. Put the Avatar on top and make it full width */
-    #avatar-container {
-        width: 100% !important;
-        height: 40vh !important; /* Takes up top 40% of the screen */
-        grid-area: auto !important; /* Turns off grid positioning */
-    }
-
-    /* 3. Put the Chat log below it and remove the laptop border */
-    #chat-log {
-        width: 100% !important;
-        height: 50vh !important; /* Takes up middle 50% of screen */
-        grid-area: auto !important;
-        border-right: none !important; 
-    }
-
-    /* 4. Fix the input box at the bottom */
-    #input-container {
+    /* 2. Fix the Top Header (Title and Dropdowns) */
+    /* Note: If your top bar uses a different ID/Class, add it to this list! */
+    header, #header, .header-container, .top-bar { 
+        display: flex !important;
+        flex-direction: column !important; /* Stack the title above the dropdown */
+        align-items: center !important;
         width: 100% !important;
         padding: 10px !important;
+        gap: 10px !important;
+        order: 1 !important; /* Force to the very top */
         box-sizing: border-box;
+    }
+
+    /* 3. Bring Jack's Avatar up */
+    #avatar-container {
+        width: 100% !important;
+        height: 40vh !important; /* Give him the top 40% of the screen */
+        order: 2 !important; /* Force right below the header */
+        grid-area: auto !important; 
+    }
+
+    /* 4. Put the Chat Log below the Avatar */
+    #chat-log {
+        width: 100% !important;
+        flex-grow: 1 !important; /* Tell the chat to stretch and fill the remaining space */
+        height: auto !important; 
+        order: 3 !important; /* Force below the avatar */
+        border: none !important; 
+        padding: 15px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 5. Keep the Input Box pinned at the bottom */
+    #input-container {
+        width: 100% !important;
+        order: 4 !important; /* Force to the absolute bottom */
+        box-sizing: border-box !important;
+        padding: 10px !important;
+        display: flex !important;
+        flex-wrap: wrap !important; /* Let buttons wrap if they need to */
+        justify-content: center !important;
     }
     
     #text-input {
         width: 100% !important;
-        font-size: 16px !important; /* Prevents iPhones from auto-zooming */
+        margin-bottom: 5px !important;
     }
 }
+
+
   </style>
 </head>
 
