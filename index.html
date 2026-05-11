@@ -153,98 +153,108 @@
       transition: height 0.05s ease, background-color 0.2s ease;
     }
  /* =========================================
-   📱 MOBILE RESPONSIVE RULES (V3 - Space Optimized)
+   📱 MOBILE RESPONSIVE RULES (V4 - Final Polish)
    ========================================= */
 @media screen and (max-width: 768px) {
-    /* 1. Lock the screen height */
+    /* 1. Lock the screen height perfectly (dvh accounts for mobile URL bars) */
     body { 
         display: flex !important; 
         flex-direction: column !important; 
-        height: 100vh !important; 
+        height: 100dvh !important; /* 'dvh' fixes the missing bottom bar */
         margin: 0 !important;
         overflow: hidden !important; 
     }
 
-    /* 2. Shrink the Header area */
+    /* 2. Header Box */
     header, #header, .header-container, .top-bar { 
         display: flex !important;
         flex-direction: column !important; 
         width: 100% !important;
-        padding: 5px 10px !important; /* Smaller padding */
+        padding: 5px 10px !important; 
         order: 1 !important; 
         box-sizing: border-box;
     }
 
-    /* Shrink the title text */
-    header h1, header h2, .logo, .title {
-        font-size: 20px !important; /* Smaller text */
+    header h1 {
+        font-size: 20px !important; 
         margin: 2px 0 8px 0 !important;
-        text-align: center !important;
     }
 
-    /* Put dropdowns side-by-side to save vertical space! */
+    /* 3. Wrap the Top Controls */
     .controls, #controls, .top-controls, .selectors {
         display: flex !important;
-        flex-direction: row !important; /* Side-by-side! */
+        flex-direction: row !important; 
+        flex-wrap: wrap !important; /* Allows the 3rd button to drop to a new line */
         justify-content: space-between !important;
         width: 100% !important;
         gap: 5px !important;
     }
 
-    /* Shrink dropdown padding and width */
+    /* Keep dropdowns side-by-side */
     select {
-        width: 49% !important; /* Fit two in a row */
-        padding: 6px !important; /* Thinner boxes */
-        font-size: 12px !important; /* Smaller text */
-        margin: 0 !important;
+        width: 48% !important; 
+        padding: 8px 4px !important; 
+        font-size: 12px !important; 
         box-sizing: border-box !important;
     }
 
-    /* If there is a top button, make it thin */
+    /* Push the Start Voice button to its own line underneath the dropdowns */
     #toggle-mic {
         width: 100% !important;
+        margin-top: 2px !important;
         padding: 8px !important;
-        margin-top: 5px !important;
         font-size: 14px !important;
     }
 
-    /* 3. Shrink Jack's Avatar Box */
+    /* 4. Avatar Box */
     #avatar-container {
         width: 100% !important;
-        height: 25vh !important; /* DECREASED FROM 40% TO 25% */
+        height: 25vh !important; 
         order: 2 !important; 
         grid-area: auto !important; 
     }
 
-    /* 4. MAXIMIZE the Chat Log Space */
+    /* 5. Chat Log (Flex: 1 makes it take empty space, but NO MORE than what is available) */
     #chat-log {
         width: 100% !important;
-        flex-grow: 1 !important; /* Forces it to claim ALL remaining empty space */
-        height: auto !important; 
+        flex: 1 1 auto !important; 
         order: 3 !important; 
         border: none !important; 
-        padding: 15px !important;
+        padding: 10px !important;
         box-sizing: border-box !important;
-        overflow-y: auto !important; /* Ensures it scrolls properly */
+        overflow-y: auto !important; 
     }
 
-    /* 5. Keep the Input Box tidy at the bottom */
+    /* 6. PIN the Input Box to the Bottom */
     #input-container {
         width: 100% !important;
+        flex: 0 0 auto !important; /* This strictly prevents it from being pushed off screen */
         order: 4 !important; 
         box-sizing: border-box !important;
-        padding: 8px 10px !important;
+        padding: 10px !important;
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        background: #121212 !important; /* Match your dark theme */
+        border-top: 1px solid #333 !important;
+        padding-bottom: 20px !important; /* Extra padding for phone swipe gestures */
     }
     
     #text-input {
-        flex-grow: 1 !important; /* Let the text box fill the row */
+        flex-grow: 1 !important; 
         width: auto !important;
         font-size: 16px !important; 
-        padding: 10px !important;
+        padding: 12px !important;
         margin: 0 !important;
+        border-radius: 20px !important; /* Makes it look like a modern mobile app */
+    }
+
+    /* Ensure mic and attachment buttons don't shrink */
+    #upload-btn, #mic-btn {
+        flex-shrink: 0 !important;
+        font-size: 22px !important;
+        padding: 5px !important;
     }
 }
 
