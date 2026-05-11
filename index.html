@@ -2,946 +2,960 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jack - AI Assistant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-  <style>
-    :root {
-      --bg-color: #121212;
-      --text-color: #E0E0E0;
-      --primary: #FFD700;
-      /* Jack's signature gold/yellow color */
-      --accent: #212121;
-      --log-bg: #1A1A1A;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jack - AI Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #E0E0E0;
+            --primary: #FFD700;
+            /* Jack's signature gold/yellow color */
+            --accent: #212121;
+            --log-bg: #1A1A1A;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      height: 100vh;
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      grid-template-rows: auto 1fr auto;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            grid-template-rows: auto 1fr auto;
+            overflow: hidden;
+        }
 
-    header {
-      grid-column: 1 / -1;
-      padding: 20px 30px;
-      background: var(--accent);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #333;
-    }
+        header {
+            grid-column: 1 / -1;
+            padding: 20px 30px;
+            background: var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+        }
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-      color: var(--primary);
-    }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--primary);
+        }
 
-    h1 span {
-      font-weight: 300;
-      color: var(--text-color);
-    }
+        h1 span {
+            font-weight: 300;
+            color: var(--text-color);
+        }
 
-    .controls {
-      display: flex;
-      gap: 10px;
-    }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
 
-    button,
-    select {
-      padding: 10px 18px;
-      background: #2D2D2D;
-      border: 1px solid #444;
-      color: white;
-      cursor: pointer;
-      border-radius: 6px;
-      font-size: 14px;
-    }
+        button,
+        select {
+            padding: 10px 18px;
+            background: #2D2D2D;
+            border: 1px solid #444;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+        }
 
-    button:hover,
-    select:hover {
-      background: #3D3D3D;
-    }
+        button:hover,
+        select:hover {
+            background: #3D3D3D;
+        }
 
-    #avatar-container {
-      grid-row: 2 / 3;
-      grid-column: 2 / 3;
-      position: relative;
-      background: radial-gradient(circle, #2a2a2a 0%, #121212 100%);
-    }
+        #avatar-container {
+            grid-row: 2 / 3;
+            grid-column: 2 / 3;
+            position: relative;
+            background: radial-gradient(circle, #2a2a2a 0%, #121212 100%);
+        }
 
-    #chat-log {
-      grid-row: 2 / 4;
-      grid-column: 1 / 2;
-      padding: 20px;
-      background: var(--log-bg);
-      border-right: 2px solid #333;
-      overflow-y: auto;
-      font-size: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+        #chat-log {
+            grid-row: 2 / 4;
+            grid-column: 1 / 2;
+            padding: 20px;
+            background: var(--log-bg);
+            border-right: 2px solid #333;
+            overflow-y: auto;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    .user-msg {
-      color: var(--text-color);
-    }
+        .user-msg {
+            color: var(--text-color);
+        }
 
-    .ai-msg {
-      color: var(--primary);
-    }
+        .ai-msg {
+            color: var(--primary);
+        }
 
-    #input-container {
-      grid-column: 2 / 3;
-      padding: 20px 30px;
-      display: flex;
-      gap: 15px;
-      border-top: 1px solid #333;
-      background: rgba(18, 18, 18, 0.9);
-    }
+        #input-container {
+            grid-column: 2 / 3;
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #333;
+            background: rgba(18, 18, 18, 0.9);
+        }
 
-    #text-input {
-      flex-grow: 1;
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #2D2D2D;
-      color: white;
-    }
+        #text-input {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #2D2D2D;
+            color: white;
+        }
 
-    #status-indicator {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      padding: 8px 15px;
-      border-radius: 20px;
-      background: #2D2D2D;
-      border: 1px solid #444;
-      font-size: 12px;
-      font-weight: bold;
-    }
+        #status-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #2D2D2D;
+            border: 1px solid #444;
+            font-size: 12px;
+            font-weight: bold;
+        }
 
-    #visualizer-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding-bottom: 20px;
-      gap: 4px;
-      pointer-events: none;
-    }
+        #visualizer-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            gap: 4px;
+            pointer-events: none;
+        }
 
-    .v-bar {
-      width: 6px;
-      height: 10px;
-      background-color: rgba(255, 215, 0, 0.4);
-      border-radius: 3px;
-      transition: height 0.05s ease, background-color 0.2s ease;
-    }
- /* =========================================
+        .v-bar {
+            width: 6px;
+            height: 10px;
+            background-color: rgba(255, 215, 0, 0.4);
+            border-radius: 3px;
+            transition: height 0.05s ease, background-color 0.2s ease;
+        }
+
+        /* =========================================
    📱 MOBILE RESPONSIVE RULES (V5 - Input Bar Fix)
    ========================================= */
-@media screen and (max-width: 768px) {
-    /* 1. Lock the screen height perfectly */
-    body { 
-        display: flex !important; 
-        flex-direction: column !important; 
-        height: 100dvh !important; 
-        margin: 0 !important;
-        overflow: hidden !important; 
-    }
+        @media screen and (max-width: 768px) {
 
-    /* 2. Header Box */
-    header, #header, .header-container, .top-bar { 
-        display: flex !important;
-        flex-direction: column !important; 
-        width: 100% !important;
-        padding: 5px 10px !important; 
-        order: 1 !important; 
-        box-sizing: border-box;
-    }
+            /* 1. Lock the screen height perfectly */
+            body {
+                display: flex !important;
+                flex-direction: column !important;
+                height: 100dvh !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
 
-    header h1 {
-        font-size: 20px !important; 
-        margin: 2px 0 8px 0 !important;
-    }
+            /* 2. Header Box */
+            header,
+            #header,
+            .header-container,
+            .top-bar {
+                display: flex !important;
+                flex-direction: column !important;
+                width: 100% !important;
+                padding: 5px 10px !important;
+                order: 1 !important;
+                box-sizing: border-box;
+            }
 
-    /* 3. Wrap the Top Controls */
-    .controls, #controls, .top-controls, .selectors {
-        display: flex !important;
-        flex-direction: row !important; 
-        flex-wrap: wrap !important; 
-        justify-content: space-between !important;
-        width: 100% !important;
-        gap: 5px !important;
-    }
+            header h1 {
+                font-size: 20px !important;
+                margin: 2px 0 8px 0 !important;
+            }
 
-    select {
-        width: 48% !important; 
-        padding: 8px 4px !important; 
-        font-size: 12px !important; 
-        box-sizing: border-box !important;
-    }
+            /* 3. Wrap the Top Controls */
+            .controls,
+            #controls,
+            .top-controls,
+            .selectors {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                gap: 5px !important;
+            }
 
-    #toggle-mic {
-        width: 100% !important;
-        margin-top: 2px !important;
-        padding: 8px !important;
-        font-size: 14px !important;
-    }
+            select {
+                width: 48% !important;
+                padding: 8px 4px !important;
+                font-size: 12px !important;
+                box-sizing: border-box !important;
+            }
 
-    /* 4. Avatar Box */
-    #avatar-container {
-        width: 100% !important;
-        height: 25vh !important; 
-        order: 2 !important; 
-        grid-area: auto !important; 
-    }
+            #toggle-mic {
+                width: 100% !important;
+                margin-top: 2px !important;
+                padding: 8px !important;
+                font-size: 14px !important;
+            }
 
-    /* 5. Chat Log */
-    #chat-log {
-        width: 100% !important;
-        flex: 1 1 auto !important; 
-        order: 3 !important; 
-        border: none !important; 
-        padding: 10px !important;
-        box-sizing: border-box !important;
-        overflow-y: auto !important; 
-    }
+            /* 4. Avatar Box */
+            #avatar-container {
+                width: 100% !important;
+                height: 25vh !important;
+                order: 2 !important;
+                grid-area: auto !important;
+            }
 
-    /* 6. PIN AND FIX THE INPUT BOX */
-    #input-container {
-        width: 100% !important;
-        flex: 0 0 auto !important; 
-        order: 4 !important; 
-        box-sizing: border-box !important;
-        padding: 10px 5px !important; /* Slightly tighter padding on the edges */
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        gap: 6px !important; /* Smaller gap so everything fits nicely */
-        background: #121212 !important; 
-        border-top: 1px solid #333 !important;
-        padding-bottom: 20px !important; 
-    }
-    
-    #text-input {
-        flex: 1 1 0% !important; /* Tells the box it is allowed to shrink */
-        min-width: 0 !important; /* THE MAGIC FIX: Overrides default input widths */
-        font-size: 16px !important; 
-        padding: 12px 15px !important;
-        margin: 0 !important;
-        border-radius: 20px !important; 
-        box-sizing: border-box !important;
-    }
+            /* 5. Chat Log */
+            #chat-log {
+                width: 100% !important;
+                flex: 1 1 auto !important;
+                order: 3 !important;
+                border: none !important;
+                padding: 10px !important;
+                box-sizing: border-box !important;
+                overflow-y: auto !important;
+            }
 
-    /* Protect the buttons from being squished */
-    #upload-btn, #mic-btn, #send-btn {
-        flex-shrink: 0 !important; /* NEVER SHRINK */
-        padding: 8px !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
+            /* 6. PIN AND FIX THE INPUT BOX */
+            #input-container {
+                width: 100% !important;
+                flex: 0 0 auto !important;
+                order: 4 !important;
+                box-sizing: border-box !important;
+                padding: 10px 5px !important;
+                /* Slightly tighter padding on the edges */
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 6px !important;
+                /* Smaller gap so everything fits nicely */
+                background: #121212 !important;
+                border-top: 1px solid #333 !important;
+                padding-bottom: 20px !important;
+            }
 
-    /* Tweak icon sizes slightly for mobile */
-    #upload-btn, #mic-btn {
-        font-size: 20px !important;
-    }
-}
+            #text-input {
+                flex: 1 1 0% !important;
+                /* Tells the box it is allowed to shrink */
+                min-width: 0 !important;
+                /* THE MAGIC FIX: Overrides default input widths */
+                font-size: 16px !important;
+                padding: 12px 15px !important;
+                margin: 0 !important;
+                border-radius: 20px !important;
+                box-sizing: border-box !important;
+            }
 
-    
+            /* Protect the buttons from being squished */
+            #upload-btn,
+            #mic-btn,
+            #send-btn {
+                flex-shrink: 0 !important;
+                /* NEVER SHRINK */
+                padding: 8px !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+            }
 
-
-  </style>
+            /* Tweak icon sizes slightly for mobile */
+            #upload-btn,
+            #mic-btn {
+                font-size: 20px !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Jack <span>Your AI Guide</span></h1>
-    <div class="controls">
-      <select id="voice-select"></select>
-      <select id="model-select">
-        <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
-        <option value="llama-3.1-8b-instant">Llama 3.1 8B (Fast)</option>
-        <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
-        <option value="gemma2-9b-it">Gemma 2 9B</option>
-      </select>
-      <button id="toggle-mic">Start Voice (V)</button>
+    <header>
+        <h1>Jack <span>Your AI Guide</span></h1>
+        <div class="controls">
+            <select id="voice-select"></select>
+            <select id="model-select">
+                <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
+                <option value="llama-3.1-8b-instant">Llama 3.1 8B (Fast)</option>
+                <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+                <option value="gemma2-9b-it">Gemma 2 9B</option>
+            </select>
+            <button id="toggle-mic">Start Voice (V)</button>
+        </div>
+    </header>
+
+    <div id="chat-log">
+        <p class="ai-msg"><strong>Jack:</strong> Hello, my name is Jack. How can I assist you today?</p>
     </div>
-  </header>
 
-  <div id="chat-log">
-    <p class="ai-msg"><strong>Jack:</strong> Hello, my name is Jack. How can I assist you today?</p>
-  </div>
-
-  <div id="avatar-container">
-    <span id="status-indicator">Idle</span>
-    <div id="visualizer-overlay">
+    <div id="avatar-container">
+        <span id="status-indicator">Idle</span>
+        <div id="visualizer-overlay">
+        </div>
     </div>
-  </div>
 
- <div id="input-container">
-    <input type="file" id="image-upload" accept="image/png, image/jpeg, image/webp" style="display: none;" />
-    <button id="upload-btn" title="Upload Image" style="background: transparent; border: none; font-size: 20px; cursor: pointer;">📎</button>
-    
-    <button id="mic-btn" title="Toggle Voice (V)" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: white;">🎤</button>
-    
-    <input type="text" id="text-input" placeholder="Type, say something (V), or attach files..." />
-    <button id="send-btn">Send</button>
-</div>
+    <div id="input-container">
+        <input type="file" id="image-upload" accept="image/png, image/jpeg, image/webp" style="display: none;" />
+        <button id="upload-btn" title="Upload Image"
+            style="background: transparent; border: none; font-size: 20px; cursor: pointer;">📎</button>
 
-  <script>
-/**
- * ==========================================
- * 1. 3D AVATAR ENGINE (REWRITTEN)
- * ==========================================
- */
-const AvatarEngine = (() => {
-    let scene, camera, renderer, clock;
-    let jackModel;
-    let breathingTime = 0;
-    let isInitialized = false;
-    
-    // Array to hold mesh data securely { mesh, mouthIndex, blinkIndex }
-    let faceMeshes = []; 
-    let headBone, spineBone;
-    let targetMouthOpen = 0; 
+        <button id="mic-btn" title="Toggle Voice (V)"
+            style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: white;">🎤</button>
 
-    function init() {
-        const container = document.getElementById('avatar-container');
-        scene = new THREE.Scene();
+        <input type="text" id="text-input" placeholder="Type, say something (V), or attach files..." />
+        <button id="send-btn">Send</button>
+    </div>
 
-        camera = new THREE.PerspectiveCamera(35, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-        camera.position.set(0, 1.45, 1.3);
-        camera.lookAt(0, 1.45, 0);
+    <script>
+        /**
+         * ==========================================
+         * 1. 3D AVATAR ENGINE (REWRITTEN)
+         * ==========================================
+         */
+        const AvatarEngine = (() => {
+            let scene, camera, renderer, clock;
+            let jackModel;
+            let breathingTime = 0;
+            let isInitialized = false;
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(container.offsetWidth, container.offsetHeight);
-        renderer.outputEncoding = THREE.sRGBEncoding; 
-        container.appendChild(renderer.domElement);
+            // Array to hold mesh data securely { mesh, mouthIndex, blinkIndex }
+            let faceMeshes = [];
+            let headBone, spineBone;
+            let targetMouthOpen = 0;
 
-        clock = new THREE.Clock();
+            function init() {
+                const container = document.getElementById('avatar-container');
+                scene = new THREE.Scene();
 
-        const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.6); 
-        scene.add(ambientLight);
-        const spotLight = new THREE.SpotLight(0xFFFFFF, 1.2); 
-        spotLight.position.set(2, 5, 5);
-        scene.add(spotLight);
-        const catchLight = new THREE.PointLight(0xFFD700, 0.4); 
-        catchLight.position.set(-1, 1.5, 0.5);
-        scene.add(catchLight);
+                camera = new THREE.PerspectiveCamera(35, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                camera.position.set(0, 1.45, 1.3);
+                camera.lookAt(0, 1.45, 0);
 
-        const loader = new THREE.GLTFLoader();
-        loader.load('avatar.glb', (gltf) => {
-            jackModel = gltf.scene;
-            scene.add(jackModel);
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
+                renderer.outputEncoding = THREE.sRGBEncoding;
+                container.appendChild(renderer.domElement);
 
-            // 1. PROCEDURAL ACTION: Gently lower arms to sides
-            headBone = jackModel.getObjectByName('Head') || jackModel.getObjectByName('mixamorigHead');
-            spineBone = jackModel.getObjectByName('Spine') || jackModel.getObjectByName('mixamorigSpine');
-            
-            const rightArm = jackModel.getObjectByName('RightArm') || jackModel.getObjectByName('mixamorigRightArm');
-            const leftArm = jackModel.getObjectByName('LeftArm') || jackModel.getObjectByName('mixamorigLeftArm');
+                clock = new THREE.Clock();
 
-            if (rightArm) {
-                rightArm.rotation.z -= 0.35; 
-                rightArm.rotation.x += 0.15; 
+                const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.6);
+                scene.add(ambientLight);
+                const spotLight = new THREE.SpotLight(0xFFFFFF, 1.2);
+                spotLight.position.set(2, 5, 5);
+                scene.add(spotLight);
+                const catchLight = new THREE.PointLight(0xFFD700, 0.4);
+                catchLight.position.set(-1, 1.5, 0.5);
+                scene.add(catchLight);
+
+                const loader = new THREE.GLTFLoader();
+                loader.load('avatar.glb', (gltf) => {
+                    jackModel = gltf.scene;
+                    scene.add(jackModel);
+
+                    // 1. PROCEDURAL ACTION: Gently lower arms to sides
+                    headBone = jackModel.getObjectByName('Head') || jackModel.getObjectByName('mixamorigHead');
+                    spineBone = jackModel.getObjectByName('Spine') || jackModel.getObjectByName('mixamorigSpine');
+
+                    const rightArm = jackModel.getObjectByName('RightArm') || jackModel.getObjectByName('mixamorigRightArm');
+                    const leftArm = jackModel.getObjectByName('LeftArm') || jackModel.getObjectByName('mixamorigLeftArm');
+
+                    if (rightArm) {
+                        rightArm.rotation.z -= 0.35;
+                        rightArm.rotation.x += 0.15;
+                    }
+                    if (leftArm) {
+                        leftArm.rotation.z += 0.35;
+                        leftArm.rotation.x += 0.15;
+                    }
+
+                    // 2. FIX LIP SYNC: Securely map individual mesh indexes (Head vs Teeth)
+                    jackModel.traverse((child) => {
+                        if (child.isMesh && child.morphTargetDictionary) {
+                            const dict = child.morphTargetDictionary;
+                            let meshData = { mesh: child, mouthIndex: -1, blinkIndex: -1 };
+
+                            const mouthKeys = ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'];
+                            for (let key of mouthKeys) {
+                                if (dict[key] !== undefined) {
+                                    meshData.mouthIndex = dict[key];
+                                    break;
+                                }
+                            }
+
+                            const blinkKeys = ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'];
+                            for (let key of blinkKeys) {
+                                if (dict[key] !== undefined) {
+                                    meshData.blinkIndex = dict[key];
+                                    break;
+                                }
+                            }
+
+                            if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1) {
+                                faceMeshes.push(meshData);
+                            }
+                        }
+                    });
+
+                    isInitialized = true;
+                });
+
+                window.addEventListener('resize', onWindowResize, false);
+                animate();
             }
-            if (leftArm) {
-                leftArm.rotation.z += 0.35;  
-                leftArm.rotation.x += 0.15;  
+
+            function onWindowResize() {
+                const container = document.getElementById('avatar-container');
+                camera.aspect = container.offsetWidth / container.offsetHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.offsetWidth, container.offsetHeight);
             }
 
-            // 2. FIX LIP SYNC: Securely map individual mesh indexes (Head vs Teeth)
-            jackModel.traverse((child) => {
-                if (child.isMesh && child.morphTargetDictionary) {
-                    const dict = child.morphTargetDictionary;
-                    let meshData = { mesh: child, mouthIndex: -1, blinkIndex: -1 };
-                    
-                    const mouthKeys = ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'];
-                    for (let key of mouthKeys) {
-                        if (dict[key] !== undefined) {
-                            meshData.mouthIndex = dict[key];
-                            break;
+            function animate() {
+                requestAnimationFrame(animate);
+                if (!isInitialized) return;
+
+                const delta = clock.getDelta();
+                breathingTime += delta * 1.5;
+
+                if (spineBone) spineBone.rotation.x = Math.sin(breathingTime) * 0.015;
+
+                if (headBone && window.appState === 'speaking') {
+                    headBone.rotation.x = Math.sin(breathingTime * 4) * 0.02;
+                } else if (headBone) {
+                    headBone.rotation.x = 0;
+                    headBone.rotation.y = Math.sin(breathingTime * 0.5) * 0.05;
+                }
+
+                // SMOOTH LIP SYNC
+                if (faceMeshes.length > 0) {
+                    faceMeshes.forEach(data => {
+                        if (data.mouthIndex !== -1) {
+                            let current = data.mesh.morphTargetInfluences[data.mouthIndex];
+                            data.mesh.morphTargetInfluences[data.mouthIndex] += (targetMouthOpen - current) * 0.35;
+                        }
+                    });
+                }
+
+                renderer.render(scene, camera);
+            }
+
+            function updateMouth(isSpeaking, averageVolume) {
+                if (!isInitialized || faceMeshes.length === 0) return;
+                if (isSpeaking && averageVolume > 0.02) {
+                    targetMouthOpen = Math.min(averageVolume * 6.0, 0.85);
+                } else {
+                    targetMouthOpen = 0;
+                }
+            }
+
+            function blink() {
+                if (!isInitialized || faceMeshes.length === 0) return;
+                faceMeshes.forEach(data => {
+                    if (data.blinkIndex !== -1) {
+                        data.mesh.morphTargetInfluences[data.blinkIndex] = 1.0;
+                        if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
+                            data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 1.0;
                         }
                     }
-
-                    const blinkKeys = ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'];
-                    for (let key of blinkKeys) {
-                        if (dict[key] !== undefined) {
-                            meshData.blinkIndex = dict[key];
-                            break;
+                });
+                setTimeout(() => {
+                    faceMeshes.forEach(data => {
+                        if (data.blinkIndex !== -1) {
+                            data.mesh.morphTargetInfluences[data.blinkIndex] = 0;
+                            if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
+                                data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 0;
+                            }
                         }
-                    }
-
-                    if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1) {
-                        faceMeshes.push(meshData);
-                    }
-                }
-            });
-
-            isInitialized = true;
-        });
-
-        window.addEventListener('resize', onWindowResize, false);
-        animate();
-    }
-
-    function onWindowResize() {
-        const container = document.getElementById('avatar-container');
-        camera.aspect = container.offsetWidth / container.offsetHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.offsetWidth, container.offsetHeight);
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-        if (!isInitialized) return;
-
-        const delta = clock.getDelta();
-        breathingTime += delta * 1.5;
-        
-        if (spineBone) spineBone.rotation.x = Math.sin(breathingTime) * 0.015; 
-        
-        if (headBone && window.appState === 'speaking') {
-            headBone.rotation.x = Math.sin(breathingTime * 4) * 0.02; 
-        } else if (headBone) {
-            headBone.rotation.x = 0;
-            headBone.rotation.y = Math.sin(breathingTime * 0.5) * 0.05; 
-        }
-
-        // SMOOTH LIP SYNC
-        if (faceMeshes.length > 0) {
-            faceMeshes.forEach(data => {
-                if (data.mouthIndex !== -1) {
-                    let current = data.mesh.morphTargetInfluences[data.mouthIndex];
-                    data.mesh.morphTargetInfluences[data.mouthIndex] += (targetMouthOpen - current) * 0.35;
-                }
-            });
-        }
-
-        renderer.render(scene, camera);
-    }
-
-    function updateMouth(isSpeaking, averageVolume) {
-        if (!isInitialized || faceMeshes.length === 0) return;
-        if (isSpeaking && averageVolume > 0.02) {
-            targetMouthOpen = Math.min(averageVolume * 6.0, 0.85); 
-        } else {
-            targetMouthOpen = 0; 
-        }
-    }
-
-    function blink() {
-        if (!isInitialized || faceMeshes.length === 0) return;
-        faceMeshes.forEach(data => {
-            if (data.blinkIndex !== -1) {
-                data.mesh.morphTargetInfluences[data.blinkIndex] = 1.0;
-                if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
-                    data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 1.0; 
-                }
+                    });
+                }, 150);
             }
-        });
-        setTimeout(() => {
-            faceMeshes.forEach(data => {
-                if (data.blinkIndex !== -1) {
-                    data.mesh.morphTargetInfluences[data.blinkIndex] = 0;
-                    if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
-                        data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 0; 
-                    }
-                }
-            });
-        }, 150);
-    }
 
-    let blinkInterval;
-    function startBlinkLoop() {
-        clearInterval(blinkInterval);
-        function scheduleNextBlink() {
-            const delay = Math.random() * 4000 + 2500; 
-            blinkInterval = setTimeout(() => {
-                blink();
+            let blinkInterval;
+            function startBlinkLoop() {
+                clearInterval(blinkInterval);
+                function scheduleNextBlink() {
+                    const delay = Math.random() * 4000 + 2500;
+                    blinkInterval = setTimeout(() => {
+                        blink();
+                        scheduleNextBlink();
+                    }, delay);
+                }
                 scheduleNextBlink();
-            }, delay);
-        }
-        scheduleNextBlink();
-    }
-
-    return { init, updateMouth, startBlinkLoop };
-})();
-
-/**
- * ==========================================
- * 2. REFINED AUDIO PROCESSING
- * ==========================================
- */
-const AudioEngine = (() => {
-    let audioContext, analyser, microphone, scriptProcessor;
-    let isActive = false;
-
-    async function startInputStream() {
-        if (isActive) return true;
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            microphone = audioContext.createMediaStreamSource(stream);
-            analyser = audioContext.createAnalyser();
-            analyser.smoothingTimeConstant = 0.2; 
-            analyser.fftSize = 1024;
-            microphone.connect(analyser);
-
-            scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
-            analyser.connect(scriptProcessor);
-            scriptProcessor.connect(audioContext.destination);
-
-            scriptProcessor.onaudioprocess = processAudio;
-            isActive = true;
-            return true;
-        } catch (e) {
-            console.error("Audio engine failed:", e);
-            AppManager.setUIStatus("Mic Error");
-            isActive = false;
-            return false;
-        }
-    }
-
-    function processAudio() {
-        if (!isActive || !analyser) return;
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(dataArray);
-
-        let sum = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i];
-        }
-        const average = (sum / dataArray.length) / 255; 
-
-        AvatarEngine.updateMouth(true, average);
-        AppManager.updateVisualizer(dataArray);
-    }
-
-    function stopInputStream() {
-        if (!isActive) return;
-        if (scriptProcessor) scriptProcessor.disconnect();
-        if (analyser) analyser.disconnect();
-        if (microphone) microphone.mediaStream.getTracks()[0].stop();
-        if (audioContext) audioContext.close();
-        isActive = false;
-        AvatarEngine.updateMouth(false, 0);
-    }
-
-    return { startInputStream, stopInputStream };
-})();
-
-/**
- * ==========================================
- * 3. REFINED SPEECH & STATE MANAGEMENT
- * ==========================================
- */
-const AppManager = (() => {
-    let recognition, synth;
-    let selectedVoice = null;
-    let currentState = 'idle'; 
-    let isToggledOn = false;
-    let currentUtterance = null; 
-    let base64ImageData = null; 
-    let knowledgeBaseText = ""; // NEW: Jack's short-term memory bank
-    let chatHistory = [];
-
-    function init() {
-        // Connect the new bottom Mic button
-        const micBtn = document.getElementById('mic-btn');
-        if(micBtn) {
-            micBtn.addEventListener('click', toggleAILife);
-        }
-        document.getElementById('send-btn').addEventListener('click', handleSendInput);
-        document.getElementById('text-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') handleSendInput(); });
-        document.getElementById('toggle-mic').addEventListener('click', toggleAILife);
-        document.getElementById('voice-select').addEventListener('change', (e) => {
-            selectedVoice = synth.getVoices().find(v => v.voiceURI === e.target.value);
-        });
-
-        // 1. Image Upload Logic
-        const imageUploadInput = document.getElementById('image-upload');
-        const uploadBtn = document.getElementById('upload-btn');
-        if(uploadBtn && imageUploadInput) {
-            uploadBtn.addEventListener('click', () => imageUploadInput.click());
-            imageUploadInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        base64ImageData = e.target.result;
-                        addChatMessage('user', `<i>[Attached Image: ${file.name}]</i>`);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        // 2. NEW: Document Upload Logic (RAG Memory)
-        const docUploadInput = document.getElementById('doc-upload');
-        const docUploadBtn = document.getElementById('upload-doc-btn');
-        if(docUploadBtn && docUploadInput) {
-            docUploadBtn.addEventListener('click', () => docUploadInput.click());
-            docUploadInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // Store the document text in Jack's memory variable
-                        knowledgeBaseText = e.target.result;
-                        addChatMessage('user', `<i>[Knowledge Base Uploaded: ${file.name}]. Jack has memorized this document.</i>`);
-                    };
-                    // Read as raw text instead of a data URL
-                    reader.readAsText(file);
-                }
-            });
-        }
-
-        synth = window.speechSynthesis;
-        setTimeout(populateVoiceList, 100);
-        synth.onvoiceschanged = populateVoiceList;
-
-        const visualizer = document.getElementById('visualizer-overlay');
-        visualizer.innerHTML = '';
-        for (let i = 0; i < 30; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'v-bar';
-            visualizer.appendChild(bar);
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 'v' && document.activeElement.id !== 'text-input') toggleAILife();
-        });
-    }
-
-    function populateVoiceList() {
-        const voices = synth.getVoices();
-        const select = document.getElementById('voice-select');
-        select.innerHTML = '';
-        if (voices.length === 0) return;
-
-        const highQualityKeywords = ['Microsoft David', 'Google US English Male', 'en-US-Neural', 'Standard-B', 'Daniel', 'Male'];
-        let prioritizedMaleVoices = [];
-        let otherVoices = [];
-
-        voices.forEach(voice => {
-            const isKnownMale = highQualityKeywords.some(keyword => voice.name.includes(keyword) || voice.voiceURI.includes(keyword));
-            if (isKnownMale && voice.lang.includes('en-US')) prioritizedMaleVoices.unshift(voice); 
-            else otherVoices.push(voice);
-        });
-
-        const finalListOfVoices = prioritizedMaleVoices.concat(otherVoices);
-
-        finalListOfVoices.forEach((voice, i) => {
-            const option = document.createElement('option');
-            let qualityTag = (prioritizedMaleVoices.includes(voice) && i < prioritizedMaleVoices.length - 3) ? '✨ ' : '';
-            option.textContent = qualityTag + voice.name + ' (' + voice.lang + ')';
-            option.value = voice.voiceURI;
-            if (i === 0) { 
-                option.selected = true;
-                selectedVoice = voice;
-            }
-            select.appendChild(option);
-        });
-    }
-
-   function toggleAILife() {
-        isToggledOn = !isToggledOn;
-        const topBtn = document.getElementById('toggle-mic');
-        const bottomMic = document.getElementById('mic-btn');
-
-        if (isToggledOn) {
-            // Turn both buttons ON (Gold)
-            if(topBtn) { topBtn.textContent = "Mic Active (V)"; topBtn.style.background = "#FFD700"; topBtn.style.color = "#121212"; }
-            if(bottomMic) { bottomMic.style.color = "#FFD700"; } 
-            startListening();
-        } else {
-            // Turn both buttons OFF (Default)
-            if(topBtn) { topBtn.textContent = "Start Voice (V)"; topBtn.style.background = "#2D2D2D"; topBtn.style.color = "white"; }
-            if(bottomMic) { bottomMic.style.color = "white"; } 
-            stopListening();
-            synth.cancel();
-            setState('idle');
-        }
-    }
-
-    function setState(state) {
-        if (currentState === state) return;
-        currentState = state;
-        window.appState = state; 
-        setUIStatus(state.charAt(0).toUpperCase() + state.slice(1));
-    }
-
-    function setUIStatus(text) {
-        document.getElementById('status-indicator').textContent = text;
-        const vBars = document.querySelectorAll('.v-bar');
-        if (text === 'Listening') {
-            document.getElementById('status-indicator').style.borderColor = "#FFD700";
-            vBars.forEach(bar => bar.style.backgroundColor = 'rgba(255, 215, 0, 0.4)');
-        } else if (text === 'Speaking') {
-            document.getElementById('status-indicator').style.borderColor = "#ffffff";
-            vBars.forEach(bar => bar.style.backgroundColor = 'rgba(255, 255, 255, 0.4)');
-        } else {
-            document.getElementById('status-indicator').style.borderColor = "#444";
-            vBars.forEach(bar => { bar.style.height = "10px"; bar.style.backgroundColor = 'rgba(255, 215, 0, 0.4)'});
-        }
-    }
-
-    function handleSendInput() {
-        const input = document.getElementById('text-input').value;
-        // Allow sending if there is text OR an image attached
-        if (!input && !base64ImageData) return; 
-        
-        if (input) addChatMessage('user', input);
-        document.getElementById('text-input').value = '';
-        processQuery(input);
-    }
-
-async function processQuery(query) {
-        if (synth.speaking) synth.cancel();
-        AudioEngine.stopInputStream();
-        setState('thinking');
-
-        try {
-            let targetModel = document.getElementById('model-select').value;
-            let apiMessages = [];
-
-            // Build Jack's System Instructions
-            let systemInstructions = "You are Jack, a helpful AI guide. Keep responses concise.";
-            if (knowledgeBaseText !== "") {
-                systemInstructions += `\n\nUSER KNOWLEDGE BASE PROVIDED. You must use the following information to answer the user's questions. If the answer is not in the knowledge base, use your general knowledge.\n\n<knowledge>\n${knowledgeBaseText}\n</knowledge>`;
             }
 
-            // Handle Vision vs Text formats
-            if (base64ImageData) {
-                targetModel = "meta-llama/llama-4-scout-17b-16e-instruct"; 
-                apiMessages = [
-                    { 
-                        role: "user", 
-                        content: [
-                            { type: "text", text: (knowledgeBaseText ? "Knowledge Base: " + knowledgeBaseText.substring(0, 2000) + "\n\n" : "") + (query || "Please describe what is in this image.") },
-                            { type: "image_url", image_url: { url: base64ImageData } }
-                        ] 
+            return { init, updateMouth, startBlinkLoop };
+        })();
+
+        /**
+         * ==========================================
+         * 2. REFINED AUDIO PROCESSING
+         * ==========================================
+         */
+        const AudioEngine = (() => {
+            let audioContext, analyser, microphone, scriptProcessor;
+            let isActive = false;
+
+            async function startInputStream() {
+                if (isActive) return true;
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    analyser = audioContext.createAnalyser();
+                    analyser.smoothingTimeConstant = 0.2;
+                    analyser.fftSize = 1024;
+                    microphone.connect(analyser);
+
+                    scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
+                    analyser.connect(scriptProcessor);
+                    scriptProcessor.connect(audioContext.destination);
+
+                    scriptProcessor.onaudioprocess = processAudio;
+                    isActive = true;
+                    return true;
+                } catch (e) {
+                    console.error("Audio engine failed:", e);
+                    AppManager.setUIStatus("Mic Error");
+                    isActive = false;
+                    return false;
+                }
+            }
+
+            function processAudio() {
+                if (!isActive || !analyser) return;
+                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                const average = (sum / dataArray.length) / 255;
+
+                AvatarEngine.updateMouth(true, average);
+                AppManager.updateVisualizer(dataArray);
+            }
+
+            function stopInputStream() {
+                if (!isActive) return;
+                if (scriptProcessor) scriptProcessor.disconnect();
+                if (analyser) analyser.disconnect();
+                if (microphone) microphone.mediaStream.getTracks()[0].stop();
+                if (audioContext) audioContext.close();
+                isActive = false;
+                AvatarEngine.updateMouth(false, 0);
+            }
+
+            return { startInputStream, stopInputStream };
+        })();
+
+        /**
+         * ==========================================
+         * 3. REFINED SPEECH & STATE MANAGEMENT
+         * ==========================================
+         */
+        const AppManager = (() => {
+            let recognition, synth;
+            let selectedVoice = null;
+            let currentState = 'idle';
+            let isToggledOn = false;
+            let currentUtterance = null;
+            let base64ImageData = null;
+            let knowledgeBaseText = ""; // NEW: Jack's short-term memory bank
+            let chatHistory = [];
+
+            function init() {
+                // Connect the new bottom Mic button
+                const micBtn = document.getElementById('mic-btn');
+                if (micBtn) {
+                    micBtn.addEventListener('click', toggleAILife);
+                }
+                document.getElementById('send-btn').addEventListener('click', handleSendInput);
+                document.getElementById('text-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSendInput(); });
+                document.getElementById('toggle-mic').addEventListener('click', toggleAILife);
+                document.getElementById('voice-select').addEventListener('change', (e) => {
+                    selectedVoice = synth.getVoices().find(v => v.voiceURI === e.target.value);
+                });
+
+                // 1. Image Upload Logic
+                const imageUploadInput = document.getElementById('image-upload');
+                const uploadBtn = document.getElementById('upload-btn');
+                if (uploadBtn && imageUploadInput) {
+                    uploadBtn.addEventListener('click', () => imageUploadInput.click());
+                    imageUploadInput.addEventListener('change', function (event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                base64ImageData = e.target.result;
+                                addChatMessage('user', `<i>[Attached Image: ${file.name}]</i>`);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+
+                // 2. NEW: Document Upload Logic (RAG Memory)
+                const docUploadInput = document.getElementById('doc-upload');
+                const docUploadBtn = document.getElementById('upload-doc-btn');
+                if (docUploadBtn && docUploadInput) {
+                    docUploadBtn.addEventListener('click', () => docUploadInput.click());
+                    docUploadInput.addEventListener('change', function (event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                // Store the document text in Jack's memory variable
+                                knowledgeBaseText = e.target.result;
+                                addChatMessage('user', `<i>[Knowledge Base Uploaded: ${file.name}]. Jack has memorized this document.</i>`);
+                            };
+                            // Read as raw text instead of a data URL
+                            reader.readAsText(file);
+                        }
+                    });
+                }
+
+                synth = window.speechSynthesis;
+                setTimeout(populateVoiceList, 100);
+                synth.onvoiceschanged = populateVoiceList;
+
+                const visualizer = document.getElementById('visualizer-overlay');
+                visualizer.innerHTML = '';
+                for (let i = 0; i < 30; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'v-bar';
+                    visualizer.appendChild(bar);
+                }
+
+                window.addEventListener('keydown', (e) => {
+                    if (e.key.toLowerCase() === 'v' && document.activeElement.id !== 'text-input') toggleAILife();
+                });
+            }
+
+            function populateVoiceList() {
+                const voices = synth.getVoices();
+                const select = document.getElementById('voice-select');
+                select.innerHTML = '';
+                if (voices.length === 0) return;
+
+                const highQualityKeywords = ['Microsoft David', 'Google US English Male', 'en-US-Neural', 'Standard-B', 'Daniel', 'Male', 'UK', 'GB'];
+                let prioritizedMaleVoices = [];
+                let otherVoices = [];
+
+                voices.forEach(voice => {
+                    const isKnownMale = highQualityKeywords.some(keyword => voice.name.includes(keyword) || voice.voiceURI.includes(keyword));
+                    if (isKnownMale && voice.lang.includes('en')) prioritizedMaleVoices.unshift(voice);
+                    else otherVoices.push(voice);
+                });
+
+                const finalListOfVoices = prioritizedMaleVoices.concat(otherVoices);
+
+                finalListOfVoices.forEach((voice, i) => {
+                    const option = document.createElement('option');
+                    let qualityTag = (prioritizedMaleVoices.includes(voice) && i < prioritizedMaleVoices.length - 3) ? '✨ ' : '';
+                    option.textContent = qualityTag + voice.name + ' (' + voice.lang + ')';
+                    option.value = voice.voiceURI;
+                    if (i === 0) {
+                        option.selected = true;
+                        selectedVoice = voice;
                     }
-                ];
-                // Note: We intentionally don't save huge image blobs to chat history to save tokens
-            } else {
-                
-                // NEW: Add the user's message to the memory bank
-                chatHistory.push({ role: "user", content: query });
+                    select.appendChild(option);
+                });
+            }
 
-                // NEW: Limit memory to the last 10 messages so we don't crash the API with a massive payload
-                if (chatHistory.length > 10) {
-                    chatHistory = chatHistory.slice(chatHistory.length - 10);
+            function toggleAILife() {
+                isToggledOn = !isToggledOn;
+                const topBtn = document.getElementById('toggle-mic');
+                const bottomMic = document.getElementById('mic-btn');
+
+                if (isToggledOn) {
+                    // Turn both buttons ON (Gold)
+                    if (topBtn) { topBtn.textContent = "Mic Active (V)"; topBtn.style.background = "#FFD700"; topBtn.style.color = "#121212"; }
+                    if (bottomMic) { bottomMic.style.color = "#FFD700"; }
+                    startListening();
+                } else {
+                    // Turn both buttons OFF (Default)
+                    if (topBtn) { topBtn.textContent = "Start Voice (V)"; topBtn.style.background = "#2D2D2D"; topBtn.style.color = "white"; }
+                    if (bottomMic) { bottomMic.style.color = "white"; }
+                    stopListening();
+                    synth.cancel();
+                    setState('idle');
+                }
+            }
+
+            function setState(state) {
+                if (currentState === state) return;
+                currentState = state;
+                window.appState = state;
+                setUIStatus(state.charAt(0).toUpperCase() + state.slice(1));
+            }
+
+            function setUIStatus(text) {
+                document.getElementById('status-indicator').textContent = text;
+                const vBars = document.querySelectorAll('.v-bar');
+                if (text === 'Listening') {
+                    document.getElementById('status-indicator').style.borderColor = "#FFD700";
+                    vBars.forEach(bar => bar.style.backgroundColor = 'rgba(255, 215, 0, 0.4)');
+                } else if (text === 'Speaking') {
+                    document.getElementById('status-indicator').style.borderColor = "#ffffff";
+                    vBars.forEach(bar => bar.style.backgroundColor = 'rgba(255, 255, 255, 0.4)');
+                } else {
+                    document.getElementById('status-indicator').style.borderColor = "#444";
+                    vBars.forEach(bar => { bar.style.height = "10px"; bar.style.backgroundColor = 'rgba(255, 215, 0, 0.4)' });
+                }
+            }
+
+            function handleSendInput() {
+                const input = document.getElementById('text-input').value;
+                // Allow sending if there is text OR an image attached
+                if (!input && !base64ImageData) return;
+
+                if (input) addChatMessage('user', input);
+                document.getElementById('text-input').value = '';
+                processQuery(input);
+            }
+
+            async function processQuery(query) {
+                if (synth.speaking) synth.cancel();
+                AudioEngine.stopInputStream();
+                setState('thinking');
+
+                try {
+                    let targetModel = document.getElementById('model-select').value;
+                    let apiMessages = [];
+
+                    // Build Jack's System Instructions
+                    let systemInstructions = "You are Jack, a helpful AI guide. Keep responses concise.";
+                    if (knowledgeBaseText !== "") {
+                        systemInstructions += `\n\nUSER KNOWLEDGE BASE PROVIDED. You must use the following information to answer the user's questions. If the answer is not in the knowledge base, use your general knowledge.\n\n<knowledge>\n${knowledgeBaseText}\n</knowledge>`;
+                    }
+
+                    // Handle Vision vs Text formats
+                    if (base64ImageData) {
+                        targetModel = "meta-llama/llama-4-scout-17b-16e-instruct";
+                        apiMessages = [
+                            {
+                                role: "user",
+                                content: [
+                                    { type: "text", text: (knowledgeBaseText ? "Knowledge Base: " + knowledgeBaseText.substring(0, 2000) + "\n\n" : "") + (query || "Please describe what is in this image.") },
+                                    { type: "image_url", image_url: { url: base64ImageData } }
+                                ]
+                            }
+                        ];
+                        // Note: We intentionally don't save huge image blobs to chat history to save tokens
+                    } else {
+
+                        // NEW: Add the user's message to the memory bank
+                        chatHistory.push({ role: "user", content: query });
+
+                        // NEW: Limit memory to the last 10 messages so we don't crash the API with a massive payload
+                        if (chatHistory.length > 10) {
+                            chatHistory = chatHistory.slice(chatHistory.length - 10);
+                        }
+
+                        // NEW: Combine System Instructions with the entire Chat History using the spread operator (...)
+                        apiMessages = [
+                            { role: "system", content: systemInstructions },
+                            ...chatHistory
+                        ];
+                    }
+
+                    // Call the local Flask backend
+                    // MAKE SURE YOU INCLUDE /api/chat AT THE END!
+                    const response = await fetch("https://jack-ai-assistant.onrender.com/api/chat", {
+                        method: "POST",
+                        // ... the rest of your code stays the same
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            model: targetModel,
+                            messages: apiMessages
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error);
+
+                    const aiText = data.response;
+                    addChatMessage('ai', aiText);
+
+                    // NEW: Save Jack's answer to the memory bank so he remembers what he just said!
+                    if (!base64ImageData) {
+                        chatHistory.push({ role: "assistant", content: aiText });
+                    }
+
+                    // Cleanup buffers
+                    base64ImageData = null;
+                    if (document.getElementById('image-upload')) document.getElementById('image-upload').value = "";
+
+                    speak(aiText);
+
+                } catch (error) {
+                    console.error("Backend Error:", error);
+                    addChatMessage('ai', "Error connecting to Flask backend: " + error.message);
+                    setState('idle');
+                    base64ImageData = null;
+                }
+            }
+
+
+            function speak(text) {
+                if (!selectedVoice) return;
+                setState('speaking');
+
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.voice = selectedVoice;
+                currentUtterance.pitch = 0.95;
+                currentUtterance.rate = 1.0;
+
+                currentUtterance.onstart = () => { simulateSpeakingAudio(currentUtterance.text.length); };
+                currentUtterance.onend = () => {
+                    simulateSpeakingAudioStop();
+                    if (isToggledOn) startListening(); else setState('idle');
+                };
+
+                synth.speak(currentUtterance);
+            }
+
+            let speakVolumeSim;
+            function simulateSpeakingAudio(charCount) {
+                if (speakVolumeSim) clearInterval(speakVolumeSim);
+                speakVolumeSim = setInterval(() => {
+                    if (window.appState === 'speaking') {
+                        const vol = Math.random() * 0.18;
+                        AvatarEngine.updateMouth(true, vol);
+                        updateVisualizerSim(vol);
+                    }
+                }, 100);
+            }
+
+            function simulateSpeakingAudioStop() {
+                if (speakVolumeSim) clearInterval(speakVolumeSim);
+                AvatarEngine.updateMouth(false, 0);
+                updateVisualizerSim(0);
+            }
+
+            function startListening() {
+                if (!isToggledOn) return;
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+                if (!SpeechRecognition) {
+                    addChatMessage('ai', "Error: Your browser does not support voice recognition. Please use Google Chrome or Edge.");
+                    toggleAILife();
+                    return;
                 }
 
-                // NEW: Combine System Instructions with the entire Chat History using the spread operator (...)
-                apiMessages = [
-                    { role: "system", content: systemInstructions },
-                    ...chatHistory 
-                ];
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = () => {
+                    console.log("🎤 Microphone is active and listening...");
+                    setState('listening');
+                };
+
+                recognition.onresult = (e) => {
+                    // FIXED: Changed e.resultIndex to e.results[0]
+                    const transcript = e.results[0][0].transcript;
+                    console.log("🗣️ Jack heard:", transcript);
+                    document.getElementById('text-input').value = transcript;
+                    setTimeout(handleSendInput, 300);
+                };
+
+                recognition.onerror = (e) => {
+                    console.error("❌ Microphone Error:", e.error);
+
+                    if (e.error === 'not-allowed') {
+                        addChatMessage('ai', "Error: Microphone access is blocked. Check your browser permissions.");
+                        toggleAILife();
+                    }
+
+                    if (e.error !== 'no-speech' && isToggledOn) recognition.start();
+                };
+
+                recognition.onend = () => {
+                    console.log("🛑 Microphone stopped.");
+                    if (isToggledOn && currentState === 'listening') { recognition.start(); }
+                };
+
+                try {
+                    recognition.start();
+                } catch (err) {
+                    console.error("Failed to start recognition:", err);
+                }
             }
 
-            // Call the local Flask backend
-            // MAKE SURE YOU INCLUDE /api/chat AT THE END!
-const response = await fetch("https://jack-ai-assistant.onrender.com/api/chat", {
-    method: "POST",
-    // ... the rest of your code stays the same
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    model: targetModel,
-                    messages: apiMessages
-                })
-            });
+            function stopListening() { if (recognition) recognition.abort(); }
 
-            const data = await response.json();
-            if(data.error) throw new Error(data.error);
-
-            const aiText = data.response;
-            addChatMessage('ai', aiText);
-            
-            // NEW: Save Jack's answer to the memory bank so he remembers what he just said!
-            if (!base64ImageData) {
-                chatHistory.push({ role: "assistant", content: aiText });
+            function addChatMessage(sender, text) {
+                const log = document.getElementById('chat-log');
+                const p = document.createElement('p');
+                p.className = sender === 'user' ? 'user-msg' : 'ai-msg';
+                const name = sender === 'user' ? 'You' : 'Jack';
+                p.innerHTML = `<strong>${name}:</strong> ${text}`;
+                log.appendChild(p);
+                log.scrollTop = log.scrollHeight;
             }
 
-            // Cleanup buffers
-            base64ImageData = null; 
-            if(document.getElementById('image-upload')) document.getElementById('image-upload').value = ""; 
+            function updateVisualizer(dataArray) {
+                if (currentState !== 'listening' || !isToggledOn) return;
+                const vBars = document.querySelectorAll('.v-bar');
+                const bufferLength = dataArray.length;
+                const barCount = vBars.length;
+                const step = Math.floor(bufferLength / barCount);
 
-            speak(aiText);
-            
-        } catch (error) {
-            console.error("Backend Error:", error);
-            addChatMessage('ai', "Error connecting to Flask backend: " + error.message);
-            setState('idle');
-            base64ImageData = null; 
-        }
-    }
-   
-
-    function speak(text) {
-        if (!selectedVoice) return;
-        setState('speaking');
-
-        currentUtterance = new SpeechSynthesisUtterance(text);
-        currentUtterance.voice = selectedVoice;
-        currentUtterance.pitch = 0.95; 
-        currentUtterance.rate = 1.0;
-
-        currentUtterance.onstart = () => { simulateSpeakingAudio(currentUtterance.text.length); };
-        currentUtterance.onend = () => {
-            simulateSpeakingAudioStop();
-            if (isToggledOn) startListening(); else setState('idle');
-        };
-
-        synth.speak(currentUtterance);
-    }
-
-    let speakVolumeSim;
-    function simulateSpeakingAudio(charCount) {
-        if (speakVolumeSim) clearInterval(speakVolumeSim);
-        speakVolumeSim = setInterval(() => {
-            if (window.appState === 'speaking') {
-                const vol = Math.random() * 0.18; 
-                AvatarEngine.updateMouth(true, vol);
-                updateVisualizerSim(vol);
+                for (let i = 0; i < barCount; i++) {
+                    let sum = 0;
+                    for (let j = 0; j < step; j++) { sum += dataArray[i * step + j]; }
+                    const average = sum / step;
+                    let height = 10 + (average * 1.5);
+                    height = Math.min(height, 80);
+                    vBars[i].style.height = height + 'px';
+                    if (height > 50) vBars[i].style.backgroundColor = 'rgba(255, 215, 0, 0.8)'; else vBars[i].style.backgroundColor = 'rgba(255, 215, 0, 0.4)';
+                }
             }
-        }, 100);
-    }
 
-    function simulateSpeakingAudioStop() {
-        if (speakVolumeSim) clearInterval(speakVolumeSim);
-        AvatarEngine.updateMouth(false, 0);
-        updateVisualizerSim(0);
-    }
+            function updateVisualizerSim(volume) {
+                const vBars = document.querySelectorAll('.v-bar');
+                const barCount = vBars.length;
 
-    function startListening() {
-        if (!isToggledOn) return;
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        
-        if (!SpeechRecognition) { 
-            addChatMessage('ai', "Error: Your browser does not support voice recognition. Please use Google Chrome or Edge."); 
-            toggleAILife(); 
-            return; 
-        }
-
-        recognition = new SpeechRecognition();
-        recognition.continuous = false; 
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-
-        recognition.onstart = () => { 
-            console.log("🎤 Microphone is active and listening...");
-            setState('listening'); 
-        };
-
-       recognition.onresult = (e) => {
-    // FIXED: Changed e.resultIndex to e.results[0]
-    const transcript = e.results[0][0].transcript; 
-    console.log("🗣️ Jack heard:", transcript); 
-    document.getElementById('text-input').value = transcript;
-    setTimeout(handleSendInput, 300); 
-};
-
-        recognition.onerror = (e) => { 
-            console.error("❌ Microphone Error:", e.error);
-            
-            if (e.error === 'not-allowed') {
-                addChatMessage('ai', "Error: Microphone access is blocked. Check your browser permissions.");
-                toggleAILife();
+                for (let i = 0; i < barCount; i++) {
+                    let v_noise = Math.random() * 20;
+                    let height = 10 + (volume * 200) + v_noise;
+                    height = Math.min(height, 80);
+                    vBars[i].style.height = height + 'px';
+                    if (height > 50) vBars[i].style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; else vBars[i].style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                }
             }
-            
-            if (e.error !== 'no-speech' && isToggledOn) recognition.start(); 
-        };
 
-        recognition.onend = () => { 
-            console.log("🛑 Microphone stopped.");
-            if (isToggledOn && currentState === 'listening') { recognition.start(); } 
-        };
+            return { init, handleSendInput, toggleAILife, setUIStatus, addChatMessage, processQuery, speak, startListening, updateVisualizer, simulateSpeakingAudioStop };
+        })();
 
-        try {
-            recognition.start();
-        } catch (err) {
-            console.error("Failed to start recognition:", err);
-        }
-    }
-
-    function stopListening() { if (recognition) recognition.abort(); }
-
-    function addChatMessage(sender, text) {
-        const log = document.getElementById('chat-log');
-        const p = document.createElement('p');
-        p.className = sender === 'user' ? 'user-msg' : 'ai-msg';
-        const name = sender === 'user' ? 'You' : 'Jack';
-        p.innerHTML = `<strong>${name}:</strong> ${text}`;
-        log.appendChild(p);
-        log.scrollTop = log.scrollHeight; 
-    }
-
-    function updateVisualizer(dataArray) {
-        if (currentState !== 'listening' || !isToggledOn) return;
-        const vBars = document.querySelectorAll('.v-bar');
-        const bufferLength = dataArray.length;
-        const barCount = vBars.length;
-        const step = Math.floor(bufferLength / barCount);
-
-        for (let i = 0; i < barCount; i++) {
-            let sum = 0;
-            for (let j = 0; j < step; j++) { sum += dataArray[i * step + j]; }
-            const average = sum / step;
-            let height = 10 + (average * 1.5);
-            height = Math.min(height, 80); 
-            vBars[i].style.height = height + 'px';
-            if (height > 50) vBars[i].style.backgroundColor = 'rgba(255, 215, 0, 0.8)'; else vBars[i].style.backgroundColor = 'rgba(255, 215, 0, 0.4)';
-        }
-    }
-
-    function updateVisualizerSim(volume) {
-        const vBars = document.querySelectorAll('.v-bar');
-        const barCount = vBars.length;
-
-        for (let i = 0; i < barCount; i++) {
-            let v_noise = Math.random() * 20;
-            let height = 10 + (volume * 200) + v_noise; 
-            height = Math.min(height, 80);
-            vBars[i].style.height = height + 'px';
-            if (height > 50) vBars[i].style.backgroundColor = 'rgba(255, 255, 255, 0.8)'; else vBars[i].style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-        }
-    }
-
-    return { init, handleSendInput, toggleAILife, setUIStatus, addChatMessage, processQuery, speak, startListening, updateVisualizer, simulateSpeakingAudioStop };
-})();
-
-// ==========================================
-// 4. MAIN APP INITIALIZATION
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    AvatarEngine.init();
-    AppManager.init();
-    setTimeout(() => {
-        // Safe check before blinking
-        if(typeof AvatarEngine !== 'undefined') {
-            AvatarEngine.startBlinkLoop();
-        }
-    }, 1000);
-});
-</script>
+        // ==========================================
+        // 4. MAIN APP INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            AvatarEngine.init();
+            AppManager.init();
+            setTimeout(() => {
+                // Safe check before blinking
+                if (typeof AvatarEngine !== 'undefined') {
+                    AvatarEngine.startBlinkLoop();
+                }
+            }, 1000);
+        });
+    </script>
