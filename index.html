@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jack - AI Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <style>
@@ -151,6 +152,45 @@
       border-radius: 3px;
       transition: height 0.05s ease, background-color 0.2s ease;
     }
+   /* =========================================
+   📱 MOBILE RESPONSIVE RULES
+   ========================================= */
+@media screen and (max-width: 768px) {
+    /* 1. Override the Grid Layout on the main body */
+    body { 
+        display: flex !important; 
+        flex-direction: column !important; 
+        height: auto !important;
+        overflow-x: hidden;
+    }
+
+    /* 2. Put the Avatar on top and make it full width */
+    #avatar-container {
+        width: 100% !important;
+        height: 40vh !important; /* Takes up top 40% of the screen */
+        grid-area: auto !important; /* Turns off grid positioning */
+    }
+
+    /* 3. Put the Chat log below it and remove the laptop border */
+    #chat-log {
+        width: 100% !important;
+        height: 50vh !important; /* Takes up middle 50% of screen */
+        grid-area: auto !important;
+        border-right: none !important; 
+    }
+
+    /* 4. Fix the input box at the bottom */
+    #input-container {
+        width: 100% !important;
+        padding: 10px !important;
+        box-sizing: border-box;
+    }
+    
+    #text-input {
+        width: 100% !important;
+        font-size: 16px !important; /* Prevents iPhones from auto-zooming */
+    }
+}
   </style>
 </head>
 
