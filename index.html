@@ -80,26 +80,190 @@
             background: radial-gradient(circle, #2a2a2a 0%, #121212 100%);
         }
 
-        #chat-log {
+        /* ---- CHAT SIDEBAR WRAPPER ---- */
+        #chat-sidebar {
             grid-row: 2 / 4;
             grid-column: 1 / 2;
-            padding: 20px;
-            background: var(--log-bg);
-            border-right: 2px solid #333;
-            overflow-y: auto;
-            font-size: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            background: var(--log-bg);
+            border-right: 2px solid #333;
+            overflow: hidden;
         }
 
-        .user-msg {
-            color: var(--text-color);
+        /* ---- SIDEBAR HEADER (Clear + Topics toggle) ---- */
+        #chat-sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #1f1f1f;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
         }
 
-        .ai-msg {
+        #chat-sidebar-header span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .sidebar-btn {
+            padding: 5px 10px !important;
+            font-size: 12px !important;
+            background: #2a2a2a !important;
+            border: 1px solid #444 !important;
+            border-radius: 5px !important;
+            color: #ccc !important;
+            cursor: pointer;
+        }
+
+        .sidebar-btn:hover {
+            background: #3a3a3a !important;
+            color: white !important;
+        }
+
+        /* ---- MEMORY / TOPICS PANEL ---- */
+        #memory-panel {
+            background: #191919;
+            border-bottom: 1px solid #2a2a2a;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: #888;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        #memory-panel.visible { display: block; }
+
+        #memory-panel h4 {
+            margin: 0 0 8px 0;
             color: var(--primary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
+
+        .topic-tag {
+            display: inline-block;
+            background: #2a2a2a;
+            border: 1px solid #FFD70044;
+            color: #FFD700cc;
+            border-radius: 12px;
+            padding: 3px 9px;
+            margin: 2px 3px 2px 0;
+            font-size: 11px;
+        }
+
+        /* ---- CHAT LOG ---- */
+        #chat-log {
+            flex: 1;
+            padding: 14px;
+            overflow-y: auto;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* ---- CHAT BUBBLES ---- */
+        .msg-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .msg-wrapper.user { align-items: flex-end; }
+        .msg-wrapper.ai   { align-items: flex-start; }
+
+        .msg-bubble {
+            max-width: 88%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            line-height: 1.55;
+            word-break: break-word;
+            position: relative;
+        }
+
+        .msg-wrapper.user .msg-bubble {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #E0E0E0;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-wrapper.ai .msg-bubble {
+            background: linear-gradient(135deg, #1e1a00, #2a2200);
+            border: 1px solid #FFD70044;
+            color: #FFD700;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            color: #555;
+            padding: 0 4px;
+        }
+
+        .msg-sender { font-weight: 700; color: #777; }
+
+        .copy-btn {
+            background: none !important;
+            border: none !important;
+            color: #555 !important;
+            font-size: 11px !important;
+            padding: 0 !important;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .msg-wrapper:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { color: #FFD700 !important; background: none !important; }
+
+        /* ---- TYPING INDICATOR ---- */
+        .typing-bubble {
+            background: linear-gradient(135deg, #1e1a00, #2a2200);
+            border: 1px solid #FFD70033;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            padding: 12px 18px;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 7px; height: 7px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: typingBounce 1.2s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        /* ---- TYPEWRITER CURSOR ---- */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px; height: 1em;
+            background: #FFD700;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.7s steps(1) infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
 
         #input-container {
             grid-column: 2 / 3;
@@ -153,9 +317,105 @@
             transition: height 0.05s ease, background-color 0.2s ease;
         }
 
-        /* =========================================
-   📱 MOBILE RESPONSIVE RULES (V5 - Input Bar Fix)
-   ========================================= */
+        /* =============================================
+           QUESTION COUNTER BADGE
+        ============================================= */
+        #q-counter {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(30,30,30,0.85);
+            border: 1px solid #FFD70066;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #FFD700;
+            backdrop-filter: blur(6px);
+            z-index: 10;
+            transition: transform 0.2s, background 0.3s;
+        }
+        #q-counter.pulse {
+            animation: counterPulse 0.4s ease;
+        }
+        @keyframes counterPulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.35); background: rgba(255,215,0,0.25); }
+            100% { transform: scale(1); }
+        }
+        #q-label { color: #666; font-weight: 400; }
+
+        /* =============================================
+           WATER BREAK OVERLAY (slim status card)
+        ============================================= */
+        #water-break-overlay {
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 100px;
+            z-index: 50;
+            pointer-events: none;
+        }
+        #water-break-overlay.active { display: flex; }
+
+        #wb-status-card {
+            background: rgba(10,10,18,0.82);
+            border: 1px solid #FFD70055;
+            border-radius: 16px;
+            padding: 14px 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: wbSlideUp 0.5s ease;
+            min-width: 240px;
+        }
+        @keyframes wbSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        #wb-emoji-icon { font-size: 28px; margin-bottom: 4px; animation: wbBob 1s ease-in-out infinite; }
+        @keyframes wbBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+        #wb-status-text { font-size: 13px; color: #aaa; margin-bottom: 10px; }
+        #wb-progress-wrap {
+            width: 100%; height: 5px; background: #333; border-radius: 3px; overflow: hidden; margin-bottom: 6px;
+        }
+        #wb-progress-bar {
+            height: 100%; width: 100%;
+            background: linear-gradient(90deg, #4fc3f7, #0288d1);
+            border-radius: 3px; transform-origin: left;
+            animation: progressDrain 12s linear forwards;
+        }
+        @keyframes progressDrain { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+        #wb-timer { font-size: 11px; color: #555; }
+
+        /* =============================================
+           MOOD TOAST
+        ============================================= */
+        #mood-toast {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(30,30,30,0.92);
+            border: 1px solid #FFD70055;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: #FFD700;
+            max-width: 220px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.4s, transform 0.4s;
+            pointer-events: none;
+            z-index: 20;
+        }
+        #mood-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
         @media screen and (max-width: 768px) {
 
             /* 1. Lock the screen height perfectly */
@@ -220,13 +480,12 @@
                 grid-area: auto !important;
             }
 
-            /* 5. Chat Log */
-            #chat-log {
+            /* 5. Chat Sidebar */
+            #chat-sidebar {
                 width: 100% !important;
                 flex: 1 1 auto !important;
                 order: 3 !important;
                 border: none !important;
-                padding: 10px !important;
                 box-sizing: border-box !important;
                 overflow-y: auto !important;
             }
@@ -297,14 +556,43 @@
         </div>
     </header>
 
-    <div id="chat-log">
-        <p class="ai-msg"><strong>Jack:</strong> Hello, my name is Jack. How can I assist you today?</p>
+    <div id="chat-sidebar">
+        <div id="chat-sidebar-header">
+            <span>💬 Conversation</span>
+            <div style="display:flex;gap:6px;">
+                <button class="sidebar-btn" id="topics-btn" title="Toggle Topics">🧠 Topics</button>
+                <button class="sidebar-btn" id="clear-btn" title="Clear chat">🗑️ Clear</button>
+            </div>
+        </div>
+        <div id="memory-panel">
+            <h4>📌 Topics Discussed</h4>
+            <div id="topics-list"><span style="color:#555;font-style:italic;">No topics yet.</span></div>
+        </div>
+        <div id="chat-log"></div>
     </div>
 
     <div id="avatar-container">
         <span id="status-indicator">Idle</span>
-        <div id="visualizer-overlay">
+
+        <!-- Question counter badge -->
+        <div id="q-counter" title="Questions answered">
+            <span id="q-count">0</span><span id="q-label"> / 10</span>
         </div>
+
+        <!-- Water break status (glass lives in Three.js scene) -->
+        <div id="water-break-overlay">
+            <div id="wb-status-card">
+                <div id="wb-emoji-icon">💧</div>
+                <div id="wb-status-text">Jack is taking a water break...</div>
+                <div id="wb-progress-wrap"><div id="wb-progress-bar"></div></div>
+                <div id="wb-timer">Resuming in <span id="wb-seconds">12</span>s</div>
+            </div>
+        </div>
+
+        <!-- Mood toast pop-ups -->
+        <div id="mood-toast"></div>
+
+        <div id="visualizer-overlay"></div>
     </div>
 
     <div id="input-container">
@@ -331,10 +619,92 @@
             let breathingTime = 0;
             let isInitialized = false;
 
-            // Array to hold mesh data securely { mesh, mouthIndex, blinkIndex }
             let faceMeshes = [];
-            let headBone, spineBone;
+            let headBone, spineBone, rightArmBone, rightForeArmBone, rightHandBone;
             let targetMouthOpen = 0;
+
+            // ---- Bone animation targets (lerped every frame) ----
+            let boneTargets = {};  // boneName -> { x, y, z } target rotation
+            let boneDefaults = {}; // boneName -> original rotation snapshot
+
+            // ---- 3D Glass object in scene ----
+            let glassGroup = null;
+            let glassRestPos = new THREE.Vector3(0.38, 0.88, 0.15);
+            let glassDrinkPos = new THREE.Vector3(0.08, 1.38, 0.25);
+            let glassAnimating = false;
+
+            function lerp(a, b, t) { return a + (b - a) * t; }
+
+            function lerpBones(speed) {
+                for (const [name, target] of Object.entries(boneTargets)) {
+                    const bone = jackModel ? (jackModel.getObjectByName(name) || jackModel.getObjectByName('mixamoring' + name)) : null;
+                    if (!bone) continue;
+                    bone.rotation.x = lerp(bone.rotation.x, target.x, speed);
+                    bone.rotation.y = lerp(bone.rotation.y, target.y, speed);
+                    bone.rotation.z = lerp(bone.rotation.z, target.z, speed);
+                }
+            }
+
+            function setBoneTarget(name, x, y, z) {
+                boneTargets[name] = { x, y, z };
+            }
+
+            function resetBoneTarget(name) {
+                if (boneDefaults[name]) {
+                    boneTargets[name] = { ...boneDefaults[name] };
+                }
+            }
+
+            function buildGlass() {
+                glassGroup = new THREE.Group();
+
+                // Glass body (cylinder, tapered slightly)
+                const bodyGeo = new THREE.CylinderGeometry(0.03, 0.025, 0.1, 16, 1, true);
+                const glassMat = new THREE.MeshPhysicalMaterial({
+                    color: 0xaaddff, transparent: true, opacity: 0.25,
+                    roughness: 0, metalness: 0, side: THREE.DoubleSide
+                });
+                const body = new THREE.Mesh(bodyGeo, glassMat);
+                glassGroup.add(body);
+
+                // Water inside
+                const waterGeo = new THREE.CylinderGeometry(0.028, 0.023, 0.065, 16);
+                const waterMat = new THREE.MeshPhongMaterial({
+                    color: 0x55aaff, transparent: true, opacity: 0.55
+                });
+                const water = new THREE.Mesh(waterGeo, waterMat);
+                water.position.y = -0.017;
+                glassGroup.add(water);
+
+                // Glass bottom
+                const bottomGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.006, 16);
+                const bottomMat = new THREE.MeshPhongMaterial({ color: 0x88bbdd, transparent: true, opacity: 0.4 });
+                const bottom = new THREE.Mesh(bottomGeo, bottomMat);
+                bottom.position.y = -0.05;
+                glassGroup.add(bottom);
+
+                // Coaster (flat disc under glass)
+                const coasterGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.005, 20);
+                const coasterMat = new THREE.MeshPhongMaterial({ color: 0x5a3a18 });
+                const coaster = new THREE.Mesh(coasterGeo, coasterMat);
+                coaster.position.y = -0.055;
+                glassGroup.add(coaster);
+
+                // Small table surface
+                const tableGeo = new THREE.BoxGeometry(0.18, 0.012, 0.14);
+                const tableMat = new THREE.MeshPhongMaterial({ color: 0x3a2510 });
+                const table = new THREE.Mesh(tableGeo, tableMat);
+                table.position.y = -0.063;
+                glassGroup.add(table);
+
+                glassGroup.position.copy(glassRestPos);
+                scene.add(glassGroup);
+
+                // Subtle glow light near glass
+                const glassLight = new THREE.PointLight(0x88ccff, 0.3, 0.5);
+                glassLight.position.copy(glassRestPos);
+                scene.add(glassLight);
+            }
 
             function init() {
                 const container = document.getElementById('avatar-container');
@@ -366,50 +736,42 @@
                     jackModel = gltf.scene;
                     scene.add(jackModel);
 
-                    // 1. PROCEDURAL ACTION: Gently lower arms to sides
-                    headBone = jackModel.getObjectByName('Head') || jackModel.getObjectByName('mixamorigHead');
-                    spineBone = jackModel.getObjectByName('Spine') || jackModel.getObjectByName('mixamorigSpine');
+                    headBone   = jackModel.getObjectByName('Head')        || jackModel.getObjectByName('mixamorigHead');
+                    spineBone  = jackModel.getObjectByName('Spine')       || jackModel.getObjectByName('mixamorigSpine');
+                    rightArmBone     = jackModel.getObjectByName('RightArm')     || jackModel.getObjectByName('mixamorigRightArm');
+                    rightForeArmBone = jackModel.getObjectByName('RightForeArm') || jackModel.getObjectByName('mixamorigRightForeArm');
+                    rightHandBone    = jackModel.getObjectByName('RightHand')    || jackModel.getObjectByName('mixamorigRightHand');
 
-                    const rightArm = jackModel.getObjectByName('RightArm') || jackModel.getObjectByName('mixamorigRightArm');
+                    if (rightArmBone) {
+                        rightArmBone.rotation.z -= 0.35;
+                        rightArmBone.rotation.x += 0.15;
+                        boneDefaults['RightArm']     = { x: rightArmBone.rotation.x,     y: rightArmBone.rotation.y,     z: rightArmBone.rotation.z };
+                    }
+                    if (rightForeArmBone) {
+                        boneDefaults['RightForeArm'] = { x: rightForeArmBone.rotation.x, y: rightForeArmBone.rotation.y, z: rightForeArmBone.rotation.z };
+                    }
+                    if (rightHandBone) {
+                        boneDefaults['RightHand']    = { x: rightHandBone.rotation.x,    y: rightHandBone.rotation.y,    z: rightHandBone.rotation.z };
+                    }
+
                     const leftArm = jackModel.getObjectByName('LeftArm') || jackModel.getObjectByName('mixamorigLeftArm');
+                    if (leftArm) { leftArm.rotation.z += 0.35; leftArm.rotation.x += 0.15; }
 
-                    if (rightArm) {
-                        rightArm.rotation.z -= 0.35;
-                        rightArm.rotation.x += 0.15;
-                    }
-                    if (leftArm) {
-                        leftArm.rotation.z += 0.35;
-                        leftArm.rotation.x += 0.15;
-                    }
-
-                    // 2. FIX LIP SYNC: Securely map individual mesh indexes (Head vs Teeth)
+                    // Map morph targets
                     jackModel.traverse((child) => {
                         if (child.isMesh && child.morphTargetDictionary) {
                             const dict = child.morphTargetDictionary;
                             let meshData = { mesh: child, mouthIndex: -1, blinkIndex: -1 };
-
-                            const mouthKeys = ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'];
-                            for (let key of mouthKeys) {
-                                if (dict[key] !== undefined) {
-                                    meshData.mouthIndex = dict[key];
-                                    break;
-                                }
-                            }
-
-                            const blinkKeys = ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'];
-                            for (let key of blinkKeys) {
-                                if (dict[key] !== undefined) {
-                                    meshData.blinkIndex = dict[key];
-                                    break;
-                                }
-                            }
-
-                            if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1) {
+                            for (let key of ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'])
+                                if (dict[key] !== undefined) { meshData.mouthIndex = dict[key]; break; }
+                            for (let key of ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'])
+                                if (dict[key] !== undefined) { meshData.blinkIndex = dict[key]; break; }
+                            if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1)
                                 faceMeshes.push(meshData);
-                            }
                         }
                     });
 
+                    buildGlass();
                     isInitialized = true;
                 });
 
@@ -435,10 +797,13 @@
 
                 if (headBone && window.appState === 'speaking') {
                     headBone.rotation.x = Math.sin(breathingTime * 4) * 0.02;
-                } else if (headBone) {
+                } else if (headBone && !glassAnimating) {
                     headBone.rotation.x = 0;
                     headBone.rotation.y = Math.sin(breathingTime * 0.5) * 0.05;
                 }
+
+                // Smooth bone animation targets
+                lerpBones(0.07);
 
                 // SMOOTH LIP SYNC
                 if (faceMeshes.length > 0) {
@@ -451,6 +816,86 @@
                 }
 
                 renderer.render(scene, camera);
+            }
+
+            // -----------------------------------------------
+            // DRINKING ANIMATION - moves arm bones + glass
+            // -----------------------------------------------
+            function playDrinkAnimation(onDone) {
+                if (!isInitialized || !jackModel) { if (onDone) onDone(); return; }
+                glassAnimating = true;
+
+                const REACH_MS   = 900;   // arm reaches down to glass
+                const LIFT_MS    = 700;   // lifts glass up
+                const DRINK_MS   = 2800;  // drinking phase (3 gulps)
+                const LOWER_MS   = 700;   // lowers glass back
+                const RETURN_MS  = 900;   // arm returns to side
+
+                const totalMs = REACH_MS + LIFT_MS + DRINK_MS + LOWER_MS + RETURN_MS;
+
+                // --- PHASE 1: Reach down ---
+                setBoneTarget('RightArm',     -0.6,  0.1, -0.55);
+                setBoneTarget('RightForeArm',  0.8,  0.0,  0.0);
+                setBoneTarget('RightHand',     0.3,  0.0,  0.0);
+                if (headBone) { headBone.rotation.y = -0.15; }
+
+                // Animate glass moving up to hand
+                const glassStartPos = glassGroup.position.clone();
+                const startT = performance.now();
+
+                function animateGlass() {
+                    if (!glassAnimating) return;
+                    const now = performance.now();
+                    const elapsed = now - startT;
+
+                    if (elapsed < REACH_MS) {
+                        // Phase 1: glass stays, arm reaches
+                        requestAnimationFrame(animateGlass);
+                    } else if (elapsed < REACH_MS + LIFT_MS) {
+                        // Phase 2: lift glass with arm
+                        const t = (elapsed - REACH_MS) / LIFT_MS;
+                        const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+                        glassGroup.position.lerpVectors(glassStartPos, glassDrinkPos, ease);
+                        glassGroup.rotation.z = ease * (-0.2); // slight tilt toward face
+                        setBoneTarget('RightArm',    -0.9, 0.05, -0.5);
+                        setBoneTarget('RightForeArm', 1.4,  0.0,  0.0);
+                        requestAnimationFrame(animateGlass);
+                    } else if (elapsed < REACH_MS + LIFT_MS + DRINK_MS) {
+                        // Phase 3: drinking - tilt glass & bob head
+                        const t = (elapsed - REACH_MS - LIFT_MS) / DRINK_MS;
+                        const tiltAngle = -0.3 + Math.sin(t * Math.PI) * -0.35;
+                        glassGroup.rotation.z = tiltAngle;
+                        // Head tilts back slightly while drinking
+                        if (headBone) headBone.rotation.x = lerp(0, -0.12, Math.sin(t * Math.PI));
+                        // Gulping: arm bobs 3 times
+                        const gulp = Math.sin(t * Math.PI * 3) * 0.06;
+                        if (rightForeArmBone) rightForeArmBone.rotation.x = 1.4 + gulp;
+                        requestAnimationFrame(animateGlass);
+                    } else if (elapsed < REACH_MS + LIFT_MS + DRINK_MS + LOWER_MS) {
+                        // Phase 4: lower glass back to table
+                        const t = (elapsed - REACH_MS - LIFT_MS - DRINK_MS) / LOWER_MS;
+                        const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+                        glassGroup.position.lerpVectors(glassDrinkPos, glassRestPos, ease);
+                        glassGroup.rotation.z = lerp(glassGroup.rotation.z, 0, 0.1);
+                        setBoneTarget('RightArm',    -0.6, 0.1, -0.55);
+                        setBoneTarget('RightForeArm', 0.8,  0.0,  0.0);
+                        if (headBone) headBone.rotation.x = 0;
+                        requestAnimationFrame(animateGlass);
+                    } else if (elapsed < totalMs) {
+                        // Phase 5: arm returns to rest
+                        glassGroup.position.copy(glassRestPos);
+                        glassGroup.rotation.z = 0;
+                        resetBoneTarget('RightArm');
+                        resetBoneTarget('RightForeArm');
+                        resetBoneTarget('RightHand');
+                        if (headBone) headBone.rotation.y = 0;
+                        requestAnimationFrame(animateGlass);
+                    } else {
+                        glassAnimating = false;
+                        if (onDone) onDone();
+                    }
+                }
+                requestAnimationFrame(animateGlass);
             }
 
             function updateMouth(isSpeaking, averageVolume) {
@@ -467,18 +912,16 @@
                 faceMeshes.forEach(data => {
                     if (data.blinkIndex !== -1) {
                         data.mesh.morphTargetInfluences[data.blinkIndex] = 1.0;
-                        if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
+                        if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined)
                             data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 1.0;
-                        }
                     }
                 });
                 setTimeout(() => {
                     faceMeshes.forEach(data => {
                         if (data.blinkIndex !== -1) {
                             data.mesh.morphTargetInfluences[data.blinkIndex] = 0;
-                            if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
+                            if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined)
                                 data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 0;
-                            }
                         }
                     });
                 }, 150);
@@ -489,15 +932,12 @@
                 clearInterval(blinkInterval);
                 function scheduleNextBlink() {
                     const delay = Math.random() * 4000 + 2500;
-                    blinkInterval = setTimeout(() => {
-                        blink();
-                        scheduleNextBlink();
-                    }, delay);
+                    blinkInterval = setTimeout(() => { blink(); scheduleNextBlink(); }, delay);
                 }
                 scheduleNextBlink();
             }
 
-            return { init, updateMouth, startBlinkLoop };
+            return { init, updateMouth, startBlinkLoop, playDrinkAnimation };
         })();
 
         /**
@@ -587,6 +1027,14 @@
                 document.getElementById('send-btn').addEventListener('click', handleSendInput);
                 document.getElementById('text-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSendInput(); });
                 document.getElementById('toggle-mic').addEventListener('click', toggleAILife);
+
+                // Clear chat button
+                document.getElementById('clear-btn').addEventListener('click', clearChat);
+
+                // Topics panel toggle
+                document.getElementById('topics-btn').addEventListener('click', () => {
+                    document.getElementById('memory-panel').classList.toggle('visible');
+                });
                 document.getElementById('voice-select').addEventListener('change', (e) => {
                     selectedVoice = synth.getVoices().find(v => v.voiceURI === e.target.value);
                 });
@@ -733,6 +1181,7 @@
                 if (synth.speaking) synth.cancel();
                 AudioEngine.stopInputStream();
                 setState('thinking');
+                showTypingIndicator();
 
                 try {
                     let targetModel = document.getElementById('model-select').value;
@@ -789,10 +1238,12 @@
                     const data = await response.json();
                     if (data.error) throw new Error(data.error);
 
-                    const aiText = data.response;
-                    addChatMessage('ai', aiText);
+                    const rawText = data.response;
+                    const aiText = cleanTextForSpeech(rawText); // clean markdown for both display & speech
+                    hideTypingIndicator();
+                    addChatMessage('ai', aiText, true);
 
-                    // NEW: Save Jack's answer to the memory bank so he remembers what he just said!
+                    // Save clean text to memory (no markdown noise in history)
                     if (!base64ImageData) {
                         chatHistory.push({ role: "assistant", content: aiText });
                     }
@@ -801,16 +1252,41 @@
                     base64ImageData = null;
                     if (document.getElementById('image-upload')) document.getElementById('image-upload').value = "";
 
+                    // Track question count → triggers water break at multiples of 10
+                    incrementQuestionCounter();
+
                     speak(aiText);
 
                 } catch (error) {
                     console.error("Backend Error:", error);
+                    hideTypingIndicator();
                     addChatMessage('ai', "Error connecting to Flask backend: " + error.message);
                     setState('idle');
                     base64ImageData = null;
                 }
             }
 
+
+            function cleanTextForSpeech(text) {
+                return text
+                    .replace(/\*\*(.+?)\*\*/g, '$1')
+                    .replace(/\*(.+?)\*/g, '$1')
+                    .replace(/__(.+?)__/g, '$1')
+                    .replace(/_(.+?)_/g, '$1')
+                    .replace(/^#{1,6}\s+/gm, '')
+                    .replace(/```[\s\S]*?```/g, '')
+                    .replace(/`(.+?)`/g, '$1')
+                    .replace(/^\s*[-*+]\s+/gm, '')
+                    .replace(/^\s*\d+\.\s+/gm, '')
+                    .replace(/^>\s+/gm, '')
+                    .replace(/^[-*_]{3,}\s*$/gm, '')
+                    .replace(/\[(.+?)\]\(.*?\)/g, '$1')
+                    .replace(/!\[.*?\]\(.*?\)/g, '')
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/\n+/g, ' ')
+                    .replace(/\s{2,}/g, ' ')
+                    .trim();
+            }
 
             function speak(text) {
                 if (!selectedVoice) return;
@@ -901,14 +1377,126 @@
 
             function stopListening() { if (recognition) recognition.abort(); }
 
-            function addChatMessage(sender, text) {
+            // ---- TOPICS TRACKER ----
+            let topicsList = [];
+            function extractAndAddTopic(text) {
+                // Pull first meaningful noun phrase (first 4 words, cleaned)
+                const cleaned = text.replace(/[^a-zA-Z0-9 ]/g, '').trim();
+                const words = cleaned.split(' ').slice(0, 4).join(' ');
+                if (words.length > 3 && !topicsList.includes(words)) {
+                    topicsList.push(words);
+                    if (topicsList.length > 12) topicsList.shift();
+                    renderTopics();
+                }
+            }
+
+            function renderTopics() {
+                const el = document.getElementById('topics-list');
+                if (!el) return;
+                if (topicsList.length === 0) {
+                    el.innerHTML = '<span style="color:#555;font-style:italic;">No topics yet.</span>';
+                    return;
+                }
+                el.innerHTML = topicsList.map(t =>
+                    `<span class="topic-tag">${t}</span>`
+                ).join('');
+            }
+
+            // ---- TIMESTAMP HELPER ----
+            function getTime() {
+                return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // ---- TYPING INDICATOR ----
+            let typingIndicatorEl = null;
+            function showTypingIndicator() {
                 const log = document.getElementById('chat-log');
-                const p = document.createElement('p');
-                p.className = sender === 'user' ? 'user-msg' : 'ai-msg';
-                const name = sender === 'user' ? 'You' : 'Jack';
-                p.innerHTML = `<strong>${name}:</strong> ${text}`;
-                log.appendChild(p);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'msg-wrapper ai';
+                wrapper.id = 'typing-indicator';
+                wrapper.innerHTML = `<div class="typing-bubble">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>`;
+                log.appendChild(wrapper);
                 log.scrollTop = log.scrollHeight;
+                typingIndicatorEl = wrapper;
+            }
+
+            function hideTypingIndicator() {
+                if (typingIndicatorEl) {
+                    typingIndicatorEl.remove();
+                    typingIndicatorEl = null;
+                }
+            }
+
+            // ---- TYPEWRITER EFFECT ----
+            function typewriterEffect(bubbleEl, text, onDone) {
+                const words = text.split(' ');
+                let i = 0;
+                bubbleEl.innerHTML = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor';
+                bubbleEl.appendChild(cursor);
+
+                const interval = setInterval(() => {
+                    if (i < words.length) {
+                        cursor.insertAdjacentText('beforebegin', (i === 0 ? '' : ' ') + words[i]);
+                        i++;
+                        document.getElementById('chat-log').scrollTop = document.getElementById('chat-log').scrollHeight;
+                    } else {
+                        clearInterval(interval);
+                        cursor.remove();
+                        if (onDone) onDone();
+                    }
+                }, 38);
+            }
+
+            // ---- ADD CHAT MESSAGE (new bubble system) ----
+            function addChatMessage(sender, text, animate = false) {
+                const log = document.getElementById('chat-log');
+                const isAI = sender === 'ai';
+                const name = isAI ? 'Jack' : 'You';
+
+                const wrapper = document.createElement('div');
+                wrapper.className = `msg-wrapper ${isAI ? 'ai' : 'user'}`;
+
+                const meta = document.createElement('div');
+                meta.className = 'msg-meta';
+                meta.innerHTML = `<span class="msg-sender">${name}</span><span>${getTime()}</span>
+                    <button class="copy-btn" title="Copy" onclick="navigator.clipboard.writeText(this.dataset.text)" data-text="">⎘ Copy</button>`;
+
+                const bubble = document.createElement('div');
+                bubble.className = 'msg-bubble';
+
+                wrapper.appendChild(bubble);
+                wrapper.appendChild(meta);
+                log.appendChild(wrapper);
+                log.scrollTop = log.scrollHeight;
+
+                if (isAI && animate) {
+                    typewriterEffect(bubble, text, () => {
+                        meta.querySelector('.copy-btn').dataset.text = text;
+                    });
+                } else {
+                    bubble.textContent = text;
+                    meta.querySelector('.copy-btn').dataset.text = text;
+                }
+
+                if (isAI) extractAndAddTopic(text);
+
+                return bubble;
+            }
+
+            // ---- CLEAR CHAT ----
+            function clearChat() {
+                const log = document.getElementById('chat-log');
+                log.innerHTML = '';
+                chatHistory = [];
+                topicsList = [];
+                renderTopics();
+                addChatMessage('ai', 'Chat cleared. How can I help you?');
             }
 
             function updateVisualizer(dataArray) {
@@ -942,7 +1530,197 @@
                 }
             }
 
-            return { init, handleSendInput, toggleAILife, setUIStatus, addChatMessage, processQuery, speak, startListening, updateVisualizer, simulateSpeakingAudioStop };
+            // =============================================
+            // QUESTION COUNTER & WATER BREAK ENGINE
+            // =============================================
+            let questionCount = 0;
+            let isOnBreak = false;
+
+            const moodMessages = [
+                { emoji: "🤔", text: "Hmm, great question! Let me think..." },
+                { emoji: "💡", text: "Oh! I love this topic!" },
+                { emoji: "😄", text: "Happy to help with that!" },
+                { emoji: "🧠", text: "Interesting! My circuits are buzzing..." },
+                { emoji: "📚", text: "Let me dig into my knowledge..." },
+                { emoji: "✨", text: "This is a fun one!" },
+                { emoji: "🎯", text: "Great question, right on point!" },
+                { emoji: "🚀", text: "On it at the speed of light!" },
+            ];
+
+            const breakPhrases = [
+                "Taking a quick sip... even AIs need hydration! 💧",
+                "Brb, refueling with H₂O ☕",
+                "10 questions answered — break time! 🥤",
+                "Stay hydrated, friends! Back in a sec 💦",
+            ];
+
+            function incrementQuestionCounter() {
+                questionCount++;
+                const el = document.getElementById('q-count');
+                const counter = document.getElementById('q-counter');
+                if (el) el.textContent = questionCount;
+
+                // Pulse animation on counter
+                if (counter) {
+                    counter.classList.remove('pulse');
+                    void counter.offsetWidth; // reflow
+                    counter.classList.add('pulse');
+                }
+
+                // Every 10 questions → water break
+                if (questionCount % 10 === 0) {
+                    setTimeout(() => triggerWaterBreak(), 800);
+                } else {
+                    // Random mood toast (30% chance)
+                    if (Math.random() < 0.30) {
+                        const mood = moodMessages[Math.floor(Math.random() * moodMessages.length)];
+                        showMoodToast(mood.emoji + ' ' + mood.text);
+                    }
+                }
+            }
+
+            // ---- Web Audio: procedural water gulping sound ----
+            function playWaterDrinkSound() {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+                    function playGulp(startTime, volume) {
+                        // Gurgle oscillator
+                        const osc = ctx.createOscillator();
+                        const gainNode = ctx.createGain();
+                        const filter = ctx.createBiquadFilter();
+
+                        filter.type = 'bandpass';
+                        filter.frequency.setValueAtTime(400, startTime);
+                        filter.frequency.exponentialRampToValueAtTime(200, startTime + 0.18);
+                        filter.Q.value = 3;
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(380, startTime);
+                        osc.frequency.exponentialRampToValueAtTime(160, startTime + 0.22);
+
+                        gainNode.gain.setValueAtTime(0, startTime);
+                        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.04);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.28);
+
+                        osc.connect(filter);
+                        filter.connect(gainNode);
+                        gainNode.connect(ctx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + 0.3);
+
+                        // Swallow click sound
+                        const clickBuf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+                        const data = clickBuf.getChannelData(0);
+                        for (let i = 0; i < data.length; i++) {
+                            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
+                        }
+                        const clickSrc = ctx.createBufferSource();
+                        const clickFilter = ctx.createBiquadFilter();
+                        clickFilter.type = 'lowpass';
+                        clickFilter.frequency.value = 600;
+                        const clickGain = ctx.createGain();
+                        clickGain.gain.setValueAtTime(volume * 0.4, startTime + 0.22);
+                        clickSrc.buffer = clickBuf;
+                        clickSrc.connect(clickFilter);
+                        clickFilter.connect(clickGain);
+                        clickGain.connect(ctx.destination);
+                        clickSrc.start(startTime + 0.22);
+                    }
+
+                    // 3 gulps with realistic timing
+                    playGulp(ctx.currentTime + 0.1,  0.28);
+                    playGulp(ctx.currentTime + 0.65, 0.22);
+                    playGulp(ctx.currentTime + 1.15, 0.18);
+
+                    // Glass set-down clink at the end (2.8s into animation)
+                    setTimeout(() => {
+                        try {
+                            const ctx2 = new (window.AudioContext || window.webkitAudioContext)();
+                            const clinkBuf = ctx2.createBuffer(1, ctx2.sampleRate * 0.3, ctx2.sampleRate);
+                            const cd = clinkBuf.getChannelData(0);
+                            for (let i = 0; i < cd.length; i++) {
+                                cd[i] = Math.sin(i * 0.08) * Math.exp(-i / (ctx2.sampleRate * 0.04))
+                                      + Math.sin(i * 0.13) * Math.exp(-i / (ctx2.sampleRate * 0.025)) * 0.5;
+                            }
+                            const clinkSrc = ctx2.createBufferSource();
+                            const clinkGain = ctx2.createGain();
+                            clinkGain.gain.setValueAtTime(0.35, 0);
+                            clinkSrc.buffer = clinkBuf;
+                            clinkSrc.connect(clinkGain);
+                            clinkGain.connect(ctx2.destination);
+                            clinkSrc.start();
+                        } catch(e) {}
+                    }, 5200);
+
+                } catch(e) {
+                    console.warn('Water sound failed:', e);
+                }
+            }
+
+            function triggerWaterBreak() {
+                isOnBreak = true;
+                const overlay = document.getElementById('water-break-overlay');
+                const bar = document.getElementById('wb-progress-bar');
+                const secEl = document.getElementById('wb-seconds');
+                const statusText = document.getElementById('wb-status-text');
+                if (!overlay) return;
+
+                const phrase = breakPhrases[Math.floor(Math.random() * breakPhrases.length)];
+                addChatMessage('ai', phrase);
+                speak(phrase);
+
+                overlay.classList.add('active');
+
+                // Reset progress bar
+                if (bar) {
+                    const fresh = bar.cloneNode(true);
+                    bar.parentNode.replaceChild(fresh, bar);
+                }
+
+                // Show status messages keyed to animation phases
+                const statusMessages = [
+                    { t: 0,    txt: '🤚 Reaching for the glass...' },
+                    { t: 900,  txt: '🥤 Picking up the glass...' },
+                    { t: 1600, txt: '💧 Drinking water... *gulp gulp*' },
+                    { t: 4500, txt: '👋 Putting glass back...' },
+                    { t: 5500, txt: '😊 All refreshed!' },
+                ];
+                statusMessages.forEach(({ t, txt }) => {
+                    setTimeout(() => { if (statusText) statusText.textContent = txt; }, t);
+                });
+
+                // Play the 3D arm + glass drink animation
+                AvatarEngine.playDrinkAnimation(() => {
+                    // Called when animation fully done (~7s)
+                    overlay.classList.remove('active');
+                    isOnBreak = false;
+                    showMoodToast('😊 Back and refreshed! Ask me anything.');
+                });
+
+                // Play water sounds 1.6s in (when drinking phase starts)
+                setTimeout(() => playWaterDrinkSound(), 1600);
+
+                // Countdown timer (12s total matches animation)
+                let secs = 12;
+                if (secEl) secEl.textContent = secs;
+                const countdown = setInterval(() => {
+                    secs--;
+                    if (secEl) secEl.textContent = Math.max(secs, 0);
+                    if (secs <= 0) clearInterval(countdown);
+                }, 1000);
+            }
+
+            function showMoodToast(text, duration = 3000) {
+                const toast = document.getElementById('mood-toast');
+                if (!toast) return;
+                toast.textContent = text;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), duration);
+            }
+
+            return { init, handleSendInput, toggleAILife, setUIStatus, addChatMessage, processQuery, speak, startListening, updateVisualizer, simulateSpeakingAudioStop, incrementQuestionCounter, showMoodToast };
         })();
 
         // ==========================================
@@ -951,11 +1729,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             AvatarEngine.init();
             AppManager.init();
+            AppManager.addChatMessage('ai', 'Hello, my name is Jack. How can I assist you today?');
             setTimeout(() => {
-                // Safe check before blinking
+                AppManager.showMoodToast('👋 Hi! Ask me anything!', 4000);
                 if (typeof AvatarEngine !== 'undefined') {
                     AvatarEngine.startBlinkLoop();
                 }
-            }, 1000);
+            }, 1200);
         });
     </script>
