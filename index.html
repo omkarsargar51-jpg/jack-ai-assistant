@@ -346,49 +346,225 @@
         #q-label { color: #666; font-weight: 400; }
 
         /* =============================================
-           WATER BREAK OVERLAY (slim status card)
+           WATER BREAK OVERLAY
         ============================================= */
         #water-break-overlay {
             position: absolute;
             inset: 0;
-            background: transparent;
+            background: rgba(10,10,14,0.88);
+            backdrop-filter: blur(8px);
             display: none;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
-            padding-bottom: 100px;
             z-index: 50;
-            pointer-events: none;
+            animation: wbFadeIn 0.5s ease;
         }
         #water-break-overlay.active { display: flex; }
+        @keyframes wbFadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
 
-        #wb-status-card {
-            background: rgba(10,10,18,0.82);
-            border: 1px solid #FFD70055;
-            border-radius: 16px;
-            padding: 14px 24px;
+        #wb-scene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+        }
+
+        /* ---- DESK ---- */
+        #wb-desk {
+            position: relative;
+            width: 260px;
+            height: 110px;
+            background: linear-gradient(180deg, #2a1f10 0%, #1a1208 100%);
+            border-radius: 12px;
+            border-top: 3px solid #5a3a18;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: flex-end;
+            padding: 0 24px 14px;
+            gap: 18px;
+        }
+
+        /* ---- COASTER ---- */
+        #wb-coaster {
+            position: absolute;
+            bottom: 14px;
+            left: 58px;
+            width: 52px;
+            height: 8px;
+            background: radial-gradient(ellipse, #3a2a12, #251808);
+            border-radius: 50%;
+            border: 1px solid #5a3a18;
+        }
+
+        /* ---- GLASS ---- */
+        #wb-glass {
+            position: absolute;
+            bottom: 22px;
+            left: 66px;
+            width: 36px;
+            height: 60px;
+            background: linear-gradient(135deg,
+                rgba(200,230,255,0.15) 0%,
+                rgba(150,200,255,0.08) 40%,
+                rgba(200,230,255,0.12) 100%);
+            border: 1.5px solid rgba(180,220,255,0.35);
+            border-radius: 3px 3px 6px 6px;
+            overflow: hidden;
+            animation: glassFloat 3s ease-in-out infinite;
+        }
+        @keyframes glassFloat {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-4px); }
+        }
+
+        #wb-water {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 72%;
+            background: linear-gradient(180deg,
+                rgba(100,180,255,0.55) 0%,
+                rgba(60,140,255,0.7)  100%);
+            border-radius: 0 0 5px 5px;
+            animation: waterWave 2s ease-in-out infinite;
+        }
+        @keyframes waterWave {
+            0%,100% { height: 72%; }
+            50%      { height: 68%; }
+        }
+
+        #wb-bubbles { position: absolute; inset: 0; }
+        .wb-bubble {
+            position: absolute;
+            bottom: 4px;
+            width: 4px; height: 4px;
+            background: rgba(200,230,255,0.6);
+            border-radius: 50%;
+            animation: bubbleRise 2.5s ease-in infinite;
+        }
+        .wb-bubble:nth-child(1) { left: 20%; animation-delay: 0s;    animation-duration: 2.2s; }
+        .wb-bubble:nth-child(2) { left: 45%; animation-delay: 0.5s;  animation-duration: 2.8s; }
+        .wb-bubble:nth-child(3) { left: 70%; animation-delay: 1.0s;  animation-duration: 2.0s; }
+        .wb-bubble:nth-child(4) { left: 30%; animation-delay: 1.5s;  animation-duration: 3.1s; }
+        .wb-bubble:nth-child(5) { left: 60%; animation-delay: 0.8s;  animation-duration: 2.5s; }
+        @keyframes bubbleRise {
+            0%   { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-55px); opacity: 0; }
+        }
+
+        #wb-straw {
+            position: absolute;
+            top: 4px; right: 8px;
+            width: 4px; height: 58px;
+            background: linear-gradient(180deg, #ff9a9a, #ff6b6b);
+            border-radius: 2px;
+            transform: rotate(8deg);
+        }
+
+        /* ---- NOTEPAD ---- */
+        #wb-notepad {
+            position: absolute;
+            bottom: 14px;
+            right: 30px;
+            width: 52px;
+            height: 64px;
+            background: #f5f0e0;
+            border-radius: 3px;
+            padding: 10px 8px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .np-line {
+            height: 2px;
+            background: #ccc;
+            border-radius: 1px;
+        }
+        .np-line.short { width: 60%; }
+
+        /* ---- PEN ---- */
+        #wb-pen {
+            position: absolute;
+            bottom: 12px;
+            right: 22px;
+            width: 5px;
+            height: 70px;
+            background: linear-gradient(180deg, #222 0%, #FFD700 60%, #c8a800 100%);
+            border-radius: 3px 3px 0 0;
+            transform: rotate(-15deg);
+        }
+
+        /* ---- FLOATING DROPS ---- */
+        #wb-droplets {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            pointer-events: none;
+        }
+        .drop {
+            position: absolute;
+            font-size: 18px;
+            animation: dropFloat 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        .drop:nth-child(1) { left: 10%; top: 5px;  animation-delay: 0s; }
+        .drop:nth-child(2) { left: 50%; top: 10px; animation-delay: 1s; }
+        .drop:nth-child(3) { left: 80%; top: 2px;  animation-delay: 2s; }
+        @keyframes dropFloat {
+            0%,100% { transform: translateY(0) scale(1); opacity: 0.7; }
+            50%      { transform: translateY(-12px) scale(1.1); opacity: 1; }
+        }
+
+        /* ---- MESSAGE CARD ---- */
+        #wb-message {
             text-align: center;
-            backdrop-filter: blur(10px);
-            animation: wbSlideUp 0.5s ease;
-            min-width: 240px;
+            color: white;
         }
-        @keyframes wbSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
+        #wb-emoji {
+            font-size: 40px;
+            animation: emojiRock 1.2s ease-in-out infinite;
         }
-        #wb-emoji-icon { font-size: 28px; margin-bottom: 4px; animation: wbBob 1s ease-in-out infinite; }
-        @keyframes wbBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
-        #wb-status-text { font-size: 13px; color: #aaa; margin-bottom: 10px; }
+        @keyframes emojiRock {
+            0%,100% { transform: rotate(-10deg); }
+            50%      { transform: rotate(10deg); }
+        }
+        #wb-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFD700;
+            margin: 8px 0 4px;
+        }
+        #wb-subtitle {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 16px;
+            max-width: 280px;
+        }
         #wb-progress-wrap {
-            width: 100%; height: 5px; background: #333; border-radius: 3px; overflow: hidden; margin-bottom: 6px;
+            width: 220px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            margin: 0 auto 10px;
+            overflow: hidden;
         }
         #wb-progress-bar {
-            height: 100%; width: 100%;
-            background: linear-gradient(90deg, #4fc3f7, #0288d1);
-            border-radius: 3px; transform-origin: left;
-            animation: progressDrain 12s linear forwards;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #FFD700, #ff9a00);
+            border-radius: 3px;
+            transform-origin: left;
+            animation: progressDrain 8s linear forwards;
         }
-        @keyframes progressDrain { from{transform:scaleX(1)} to{transform:scaleX(0)} }
-        #wb-timer { font-size: 11px; color: #555; }
+        @keyframes progressDrain {
+            from { transform: scaleX(1); }
+            to   { transform: scaleX(0); }
+        }
+        #wb-timer {
+            font-size: 12px;
+            color: #666;
+        }
 
         /* =============================================
            MOOD TOAST
@@ -579,13 +755,36 @@
             <span id="q-count">0</span><span id="q-label"> / 10</span>
         </div>
 
-        <!-- Water break status (glass lives in Three.js scene) -->
+        <!-- Water break overlay -->
         <div id="water-break-overlay">
-            <div id="wb-status-card">
-                <div id="wb-emoji-icon">💧</div>
-                <div id="wb-status-text">Jack is taking a water break...</div>
-                <div id="wb-progress-wrap"><div id="wb-progress-bar"></div></div>
-                <div id="wb-timer">Resuming in <span id="wb-seconds">12</span>s</div>
+            <div id="wb-scene">
+                <div id="wb-desk">
+                    <div id="wb-coaster"></div>
+                    <div id="wb-glass">
+                        <div id="wb-water"></div>
+                        <div id="wb-bubbles">
+                            <div class="wb-bubble"></div><div class="wb-bubble"></div>
+                            <div class="wb-bubble"></div><div class="wb-bubble"></div>
+                            <div class="wb-bubble"></div>
+                        </div>
+                        <div id="wb-straw"></div>
+                    </div>
+                    <div id="wb-notepad">
+                        <div class="np-line"></div><div class="np-line"></div>
+                        <div class="np-line short"></div>
+                    </div>
+                    <div id="wb-pen"></div>
+                    <div id="wb-droplets">
+                        <span class="drop">💧</span><span class="drop">💧</span><span class="drop">💧</span>
+                    </div>
+                </div>
+                <div id="wb-message">
+                    <div id="wb-emoji">🥤</div>
+                    <div id="wb-title">Break Time!</div>
+                    <div id="wb-subtitle">Jack is taking a water break after 10 questions. Stay hydrated!</div>
+                    <div id="wb-progress-wrap"><div id="wb-progress-bar"></div></div>
+                    <div id="wb-timer">Resuming in <span id="wb-seconds">8</span>s</div>
+                </div>
             </div>
         </div>
 
@@ -619,92 +818,10 @@
             let breathingTime = 0;
             let isInitialized = false;
 
+            // Array to hold mesh data securely { mesh, mouthIndex, blinkIndex }
             let faceMeshes = [];
-            let headBone, spineBone, rightArmBone, rightForeArmBone, rightHandBone;
+            let headBone, spineBone;
             let targetMouthOpen = 0;
-
-            // ---- Bone animation targets (lerped every frame) ----
-            let boneTargets = {};  // boneName -> { x, y, z } target rotation
-            let boneDefaults = {}; // boneName -> original rotation snapshot
-
-            // ---- 3D Glass object in scene ----
-            let glassGroup = null;
-            let glassRestPos = new THREE.Vector3(0.38, 0.88, 0.15);
-            let glassDrinkPos = new THREE.Vector3(0.08, 1.38, 0.25);
-            let glassAnimating = false;
-
-            function lerp(a, b, t) { return a + (b - a) * t; }
-
-            function lerpBones(speed) {
-                for (const [name, target] of Object.entries(boneTargets)) {
-                    const bone = jackModel ? (jackModel.getObjectByName(name) || jackModel.getObjectByName('mixamoring' + name)) : null;
-                    if (!bone) continue;
-                    bone.rotation.x = lerp(bone.rotation.x, target.x, speed);
-                    bone.rotation.y = lerp(bone.rotation.y, target.y, speed);
-                    bone.rotation.z = lerp(bone.rotation.z, target.z, speed);
-                }
-            }
-
-            function setBoneTarget(name, x, y, z) {
-                boneTargets[name] = { x, y, z };
-            }
-
-            function resetBoneTarget(name) {
-                if (boneDefaults[name]) {
-                    boneTargets[name] = { ...boneDefaults[name] };
-                }
-            }
-
-            function buildGlass() {
-                glassGroup = new THREE.Group();
-
-                // Glass body (cylinder, tapered slightly)
-                const bodyGeo = new THREE.CylinderGeometry(0.03, 0.025, 0.1, 16, 1, true);
-                const glassMat = new THREE.MeshPhysicalMaterial({
-                    color: 0xaaddff, transparent: true, opacity: 0.25,
-                    roughness: 0, metalness: 0, side: THREE.DoubleSide
-                });
-                const body = new THREE.Mesh(bodyGeo, glassMat);
-                glassGroup.add(body);
-
-                // Water inside
-                const waterGeo = new THREE.CylinderGeometry(0.028, 0.023, 0.065, 16);
-                const waterMat = new THREE.MeshPhongMaterial({
-                    color: 0x55aaff, transparent: true, opacity: 0.55
-                });
-                const water = new THREE.Mesh(waterGeo, waterMat);
-                water.position.y = -0.017;
-                glassGroup.add(water);
-
-                // Glass bottom
-                const bottomGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.006, 16);
-                const bottomMat = new THREE.MeshPhongMaterial({ color: 0x88bbdd, transparent: true, opacity: 0.4 });
-                const bottom = new THREE.Mesh(bottomGeo, bottomMat);
-                bottom.position.y = -0.05;
-                glassGroup.add(bottom);
-
-                // Coaster (flat disc under glass)
-                const coasterGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.005, 20);
-                const coasterMat = new THREE.MeshPhongMaterial({ color: 0x5a3a18 });
-                const coaster = new THREE.Mesh(coasterGeo, coasterMat);
-                coaster.position.y = -0.055;
-                glassGroup.add(coaster);
-
-                // Small table surface
-                const tableGeo = new THREE.BoxGeometry(0.18, 0.012, 0.14);
-                const tableMat = new THREE.MeshPhongMaterial({ color: 0x3a2510 });
-                const table = new THREE.Mesh(tableGeo, tableMat);
-                table.position.y = -0.063;
-                glassGroup.add(table);
-
-                glassGroup.position.copy(glassRestPos);
-                scene.add(glassGroup);
-
-                // Subtle glow light near glass
-                const glassLight = new THREE.PointLight(0x88ccff, 0.3, 0.5);
-                glassLight.position.copy(glassRestPos);
-                scene.add(glassLight);
-            }
 
             function init() {
                 const container = document.getElementById('avatar-container');
@@ -736,42 +853,50 @@
                     jackModel = gltf.scene;
                     scene.add(jackModel);
 
-                    headBone   = jackModel.getObjectByName('Head')        || jackModel.getObjectByName('mixamorigHead');
-                    spineBone  = jackModel.getObjectByName('Spine')       || jackModel.getObjectByName('mixamorigSpine');
-                    rightArmBone     = jackModel.getObjectByName('RightArm')     || jackModel.getObjectByName('mixamorigRightArm');
-                    rightForeArmBone = jackModel.getObjectByName('RightForeArm') || jackModel.getObjectByName('mixamorigRightForeArm');
-                    rightHandBone    = jackModel.getObjectByName('RightHand')    || jackModel.getObjectByName('mixamorigRightHand');
+                    // 1. PROCEDURAL ACTION: Gently lower arms to sides
+                    headBone = jackModel.getObjectByName('Head') || jackModel.getObjectByName('mixamorigHead');
+                    spineBone = jackModel.getObjectByName('Spine') || jackModel.getObjectByName('mixamorigSpine');
 
-                    if (rightArmBone) {
-                        rightArmBone.rotation.z -= 0.35;
-                        rightArmBone.rotation.x += 0.15;
-                        boneDefaults['RightArm']     = { x: rightArmBone.rotation.x,     y: rightArmBone.rotation.y,     z: rightArmBone.rotation.z };
-                    }
-                    if (rightForeArmBone) {
-                        boneDefaults['RightForeArm'] = { x: rightForeArmBone.rotation.x, y: rightForeArmBone.rotation.y, z: rightForeArmBone.rotation.z };
-                    }
-                    if (rightHandBone) {
-                        boneDefaults['RightHand']    = { x: rightHandBone.rotation.x,    y: rightHandBone.rotation.y,    z: rightHandBone.rotation.z };
-                    }
-
+                    const rightArm = jackModel.getObjectByName('RightArm') || jackModel.getObjectByName('mixamorigRightArm');
                     const leftArm = jackModel.getObjectByName('LeftArm') || jackModel.getObjectByName('mixamorigLeftArm');
-                    if (leftArm) { leftArm.rotation.z += 0.35; leftArm.rotation.x += 0.15; }
 
-                    // Map morph targets
+                    if (rightArm) {
+                        rightArm.rotation.z -= 0.35;
+                        rightArm.rotation.x += 0.15;
+                    }
+                    if (leftArm) {
+                        leftArm.rotation.z += 0.35;
+                        leftArm.rotation.x += 0.15;
+                    }
+
+                    // 2. FIX LIP SYNC: Securely map individual mesh indexes (Head vs Teeth)
                     jackModel.traverse((child) => {
                         if (child.isMesh && child.morphTargetDictionary) {
                             const dict = child.morphTargetDictionary;
                             let meshData = { mesh: child, mouthIndex: -1, blinkIndex: -1 };
-                            for (let key of ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'])
-                                if (dict[key] !== undefined) { meshData.mouthIndex = dict[key]; break; }
-                            for (let key of ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'])
-                                if (dict[key] !== undefined) { meshData.blinkIndex = dict[key]; break; }
-                            if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1)
+
+                            const mouthKeys = ['viseme_O', 'viseme_aa', 'mouthOpen', 'jawOpen'];
+                            for (let key of mouthKeys) {
+                                if (dict[key] !== undefined) {
+                                    meshData.mouthIndex = dict[key];
+                                    break;
+                                }
+                            }
+
+                            const blinkKeys = ['eyeBlinkLeft', 'EyeBlinkLeft', 'blinkLeft'];
+                            for (let key of blinkKeys) {
+                                if (dict[key] !== undefined) {
+                                    meshData.blinkIndex = dict[key];
+                                    break;
+                                }
+                            }
+
+                            if (meshData.mouthIndex !== -1 || meshData.blinkIndex !== -1) {
                                 faceMeshes.push(meshData);
+                            }
                         }
                     });
 
-                    buildGlass();
                     isInitialized = true;
                 });
 
@@ -797,13 +922,10 @@
 
                 if (headBone && window.appState === 'speaking') {
                     headBone.rotation.x = Math.sin(breathingTime * 4) * 0.02;
-                } else if (headBone && !glassAnimating) {
+                } else if (headBone) {
                     headBone.rotation.x = 0;
                     headBone.rotation.y = Math.sin(breathingTime * 0.5) * 0.05;
                 }
-
-                // Smooth bone animation targets
-                lerpBones(0.07);
 
                 // SMOOTH LIP SYNC
                 if (faceMeshes.length > 0) {
@@ -816,86 +938,6 @@
                 }
 
                 renderer.render(scene, camera);
-            }
-
-            // -----------------------------------------------
-            // DRINKING ANIMATION - moves arm bones + glass
-            // -----------------------------------------------
-            function playDrinkAnimation(onDone) {
-                if (!isInitialized || !jackModel) { if (onDone) onDone(); return; }
-                glassAnimating = true;
-
-                const REACH_MS   = 900;   // arm reaches down to glass
-                const LIFT_MS    = 700;   // lifts glass up
-                const DRINK_MS   = 2800;  // drinking phase (3 gulps)
-                const LOWER_MS   = 700;   // lowers glass back
-                const RETURN_MS  = 900;   // arm returns to side
-
-                const totalMs = REACH_MS + LIFT_MS + DRINK_MS + LOWER_MS + RETURN_MS;
-
-                // --- PHASE 1: Reach down ---
-                setBoneTarget('RightArm',     -0.6,  0.1, -0.55);
-                setBoneTarget('RightForeArm',  0.8,  0.0,  0.0);
-                setBoneTarget('RightHand',     0.3,  0.0,  0.0);
-                if (headBone) { headBone.rotation.y = -0.15; }
-
-                // Animate glass moving up to hand
-                const glassStartPos = glassGroup.position.clone();
-                const startT = performance.now();
-
-                function animateGlass() {
-                    if (!glassAnimating) return;
-                    const now = performance.now();
-                    const elapsed = now - startT;
-
-                    if (elapsed < REACH_MS) {
-                        // Phase 1: glass stays, arm reaches
-                        requestAnimationFrame(animateGlass);
-                    } else if (elapsed < REACH_MS + LIFT_MS) {
-                        // Phase 2: lift glass with arm
-                        const t = (elapsed - REACH_MS) / LIFT_MS;
-                        const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-                        glassGroup.position.lerpVectors(glassStartPos, glassDrinkPos, ease);
-                        glassGroup.rotation.z = ease * (-0.2); // slight tilt toward face
-                        setBoneTarget('RightArm',    -0.9, 0.05, -0.5);
-                        setBoneTarget('RightForeArm', 1.4,  0.0,  0.0);
-                        requestAnimationFrame(animateGlass);
-                    } else if (elapsed < REACH_MS + LIFT_MS + DRINK_MS) {
-                        // Phase 3: drinking - tilt glass & bob head
-                        const t = (elapsed - REACH_MS - LIFT_MS) / DRINK_MS;
-                        const tiltAngle = -0.3 + Math.sin(t * Math.PI) * -0.35;
-                        glassGroup.rotation.z = tiltAngle;
-                        // Head tilts back slightly while drinking
-                        if (headBone) headBone.rotation.x = lerp(0, -0.12, Math.sin(t * Math.PI));
-                        // Gulping: arm bobs 3 times
-                        const gulp = Math.sin(t * Math.PI * 3) * 0.06;
-                        if (rightForeArmBone) rightForeArmBone.rotation.x = 1.4 + gulp;
-                        requestAnimationFrame(animateGlass);
-                    } else if (elapsed < REACH_MS + LIFT_MS + DRINK_MS + LOWER_MS) {
-                        // Phase 4: lower glass back to table
-                        const t = (elapsed - REACH_MS - LIFT_MS - DRINK_MS) / LOWER_MS;
-                        const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-                        glassGroup.position.lerpVectors(glassDrinkPos, glassRestPos, ease);
-                        glassGroup.rotation.z = lerp(glassGroup.rotation.z, 0, 0.1);
-                        setBoneTarget('RightArm',    -0.6, 0.1, -0.55);
-                        setBoneTarget('RightForeArm', 0.8,  0.0,  0.0);
-                        if (headBone) headBone.rotation.x = 0;
-                        requestAnimationFrame(animateGlass);
-                    } else if (elapsed < totalMs) {
-                        // Phase 5: arm returns to rest
-                        glassGroup.position.copy(glassRestPos);
-                        glassGroup.rotation.z = 0;
-                        resetBoneTarget('RightArm');
-                        resetBoneTarget('RightForeArm');
-                        resetBoneTarget('RightHand');
-                        if (headBone) headBone.rotation.y = 0;
-                        requestAnimationFrame(animateGlass);
-                    } else {
-                        glassAnimating = false;
-                        if (onDone) onDone();
-                    }
-                }
-                requestAnimationFrame(animateGlass);
             }
 
             function updateMouth(isSpeaking, averageVolume) {
@@ -912,16 +954,18 @@
                 faceMeshes.forEach(data => {
                     if (data.blinkIndex !== -1) {
                         data.mesh.morphTargetInfluences[data.blinkIndex] = 1.0;
-                        if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined)
+                        if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
                             data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 1.0;
+                        }
                     }
                 });
                 setTimeout(() => {
                     faceMeshes.forEach(data => {
                         if (data.blinkIndex !== -1) {
                             data.mesh.morphTargetInfluences[data.blinkIndex] = 0;
-                            if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined)
+                            if (data.mesh.morphTargetInfluences[data.blinkIndex + 1] !== undefined) {
                                 data.mesh.morphTargetInfluences[data.blinkIndex + 1] = 0;
+                            }
                         }
                     });
                 }, 150);
@@ -932,12 +976,15 @@
                 clearInterval(blinkInterval);
                 function scheduleNextBlink() {
                     const delay = Math.random() * 4000 + 2500;
-                    blinkInterval = setTimeout(() => { blink(); scheduleNextBlink(); }, delay);
+                    blinkInterval = setTimeout(() => {
+                        blink();
+                        scheduleNextBlink();
+                    }, delay);
                 }
                 scheduleNextBlink();
             }
 
-            return { init, updateMouth, startBlinkLoop, playDrinkAnimation };
+            return { init, updateMouth, startBlinkLoop };
         })();
 
         /**
@@ -1579,136 +1626,38 @@
                 }
             }
 
-            // ---- Web Audio: procedural water gulping sound ----
-            function playWaterDrinkSound() {
-                try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-                    function playGulp(startTime, volume) {
-                        // Gurgle oscillator
-                        const osc = ctx.createOscillator();
-                        const gainNode = ctx.createGain();
-                        const filter = ctx.createBiquadFilter();
-
-                        filter.type = 'bandpass';
-                        filter.frequency.setValueAtTime(400, startTime);
-                        filter.frequency.exponentialRampToValueAtTime(200, startTime + 0.18);
-                        filter.Q.value = 3;
-
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(380, startTime);
-                        osc.frequency.exponentialRampToValueAtTime(160, startTime + 0.22);
-
-                        gainNode.gain.setValueAtTime(0, startTime);
-                        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.04);
-                        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.28);
-
-                        osc.connect(filter);
-                        filter.connect(gainNode);
-                        gainNode.connect(ctx.destination);
-
-                        osc.start(startTime);
-                        osc.stop(startTime + 0.3);
-
-                        // Swallow click sound
-                        const clickBuf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
-                        const data = clickBuf.getChannelData(0);
-                        for (let i = 0; i < data.length; i++) {
-                            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.01));
-                        }
-                        const clickSrc = ctx.createBufferSource();
-                        const clickFilter = ctx.createBiquadFilter();
-                        clickFilter.type = 'lowpass';
-                        clickFilter.frequency.value = 600;
-                        const clickGain = ctx.createGain();
-                        clickGain.gain.setValueAtTime(volume * 0.4, startTime + 0.22);
-                        clickSrc.buffer = clickBuf;
-                        clickSrc.connect(clickFilter);
-                        clickFilter.connect(clickGain);
-                        clickGain.connect(ctx.destination);
-                        clickSrc.start(startTime + 0.22);
-                    }
-
-                    // 3 gulps with realistic timing
-                    playGulp(ctx.currentTime + 0.1,  0.28);
-                    playGulp(ctx.currentTime + 0.65, 0.22);
-                    playGulp(ctx.currentTime + 1.15, 0.18);
-
-                    // Glass set-down clink at the end (2.8s into animation)
-                    setTimeout(() => {
-                        try {
-                            const ctx2 = new (window.AudioContext || window.webkitAudioContext)();
-                            const clinkBuf = ctx2.createBuffer(1, ctx2.sampleRate * 0.3, ctx2.sampleRate);
-                            const cd = clinkBuf.getChannelData(0);
-                            for (let i = 0; i < cd.length; i++) {
-                                cd[i] = Math.sin(i * 0.08) * Math.exp(-i / (ctx2.sampleRate * 0.04))
-                                      + Math.sin(i * 0.13) * Math.exp(-i / (ctx2.sampleRate * 0.025)) * 0.5;
-                            }
-                            const clinkSrc = ctx2.createBufferSource();
-                            const clinkGain = ctx2.createGain();
-                            clinkGain.gain.setValueAtTime(0.35, 0);
-                            clinkSrc.buffer = clinkBuf;
-                            clinkSrc.connect(clinkGain);
-                            clinkGain.connect(ctx2.destination);
-                            clinkSrc.start();
-                        } catch(e) {}
-                    }, 5200);
-
-                } catch(e) {
-                    console.warn('Water sound failed:', e);
-                }
-            }
-
             function triggerWaterBreak() {
                 isOnBreak = true;
                 const overlay = document.getElementById('water-break-overlay');
                 const bar = document.getElementById('wb-progress-bar');
                 const secEl = document.getElementById('wb-seconds');
-                const statusText = document.getElementById('wb-status-text');
                 if (!overlay) return;
 
+                // Pick a random break phrase
                 const phrase = breakPhrases[Math.floor(Math.random() * breakPhrases.length)];
                 addChatMessage('ai', phrase);
                 speak(phrase);
 
                 overlay.classList.add('active');
 
-                // Reset progress bar
+                // Reset progress bar animation by cloning
                 if (bar) {
                     const fresh = bar.cloneNode(true);
                     bar.parentNode.replaceChild(fresh, bar);
                 }
 
-                // Show status messages keyed to animation phases
-                const statusMessages = [
-                    { t: 0,    txt: '🤚 Reaching for the glass...' },
-                    { t: 900,  txt: '🥤 Picking up the glass...' },
-                    { t: 1600, txt: '💧 Drinking water... *gulp gulp*' },
-                    { t: 4500, txt: '👋 Putting glass back...' },
-                    { t: 5500, txt: '😊 All refreshed!' },
-                ];
-                statusMessages.forEach(({ t, txt }) => {
-                    setTimeout(() => { if (statusText) statusText.textContent = txt; }, t);
-                });
-
-                // Play the 3D arm + glass drink animation
-                AvatarEngine.playDrinkAnimation(() => {
-                    // Called when animation fully done (~7s)
-                    overlay.classList.remove('active');
-                    isOnBreak = false;
-                    showMoodToast('😊 Back and refreshed! Ask me anything.');
-                });
-
-                // Play water sounds 1.6s in (when drinking phase starts)
-                setTimeout(() => playWaterDrinkSound(), 1600);
-
-                // Countdown timer (12s total matches animation)
-                let secs = 12;
+                // Countdown timer
+                let secs = 8;
                 if (secEl) secEl.textContent = secs;
                 const countdown = setInterval(() => {
                     secs--;
-                    if (secEl) secEl.textContent = Math.max(secs, 0);
-                    if (secs <= 0) clearInterval(countdown);
+                    if (secEl) secEl.textContent = secs;
+                    if (secs <= 0) {
+                        clearInterval(countdown);
+                        overlay.classList.remove('active');
+                        isOnBreak = false;
+                        showMoodToast('😊 Back and refreshed! Ask me anything.');
+                    }
                 }, 1000);
             }
 
